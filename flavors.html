@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>J.Lato | Flavors</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="flavors.css">
+
+<script type="module" src="flavors.js"></script>
+
+</head>
+
+
+<body>
+
+
+<header class="hero">
+
+<img src="logo.png" class="logo" alt="J.Lato" style="justify-content:center;"height="260px" width="260px">
+
+
+<h1>
+Our Flavors
+</h1>
+
+
+<p>
+Freshly made gelato creations
+</p>
+
+
+</header>
+
+
+<main>
+
+
+<section class="category-section">
+
+<h2>
+Our Menu
+</h2>
+
+
+<div id="flavorGrid" class="flavor-grid">
+
+
+<p class="loading">
+Loading flavors...
+</p>
+
+
+</div>
+
+
+</section>
+
+<!-- FILTER BAR -->
+
+<section class="filter-section">
+
+    <div class="filter-buttons">
+
+        <button class="filter-btn active" data-filter="all">
+            All
+        </button>
+
+        <button class="filter-btn" data-filter="Popular">
+            Popular
+        </button>
+
+        <button class="filter-btn" data-filter="Must Try">
+            Must Try
+        </button>
+
+        <button class="filter-btn" data-filter="Our Creation">
+            Our Creation
+        </button>
+
+        <button class="filter-btn" data-filter="Classic">
+            Classic
+        </button>
+
+        <button class="filter-btn" data-filter="Seasonal">
+            Seasonal
+        </button>
+
+    </div>
+
+</section>
+
+<!-- TEMPLATE (Hidden - JavaScript Uses This) -->
+
+<template id="flavorTemplate">
+
+    <article class="flavor-card">
+
+        <img
+            class="flavor-image"
+            src="placeholder.png"
+            alt="Flavor">
+
+        <div class="flavor-info">
+
+            <span class="flavor-category">
+                Category
+            </span>
+
+            <h3 class="flavor-name">
+                Flavor Name
+            </h3>
+
+            <p class="flavor-description">
+                Description...
+            </p>
+
+            <div class="flavor-footer">
+
+                <span class="flavor-price">
+                    0 AED
+                </span>
+
+                <span class="featured-badge">
+                    ⭐ Featured
+                </span>
+
+            </div>
+
+        </div>
+
+    </article>
+
+</template>
+
+<!-- EMPTY STATE -->
+
+<section
+    id="emptyState"
+    class="empty-state"
+    style="display:none;">
+
+    <h2>No Flavors Available</h2>
+
+    <p>
+
+        Please check back later.
+
+    </p>
+
+</section>
+</main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1155 @@
+/* =========================================================
+   J.Lato Flavors Page
+   Part 1
+========================================================= */
+
+:root{
+    --sage:#788b73;
+    --sage-dark:#62735d;
+    --sage-light:#eef2ea;
+
+    --cream:#fbf7f0;
+    --cream-dark:#f3ecdf;
+
+    --gold:#d4ad49;
+    --gold-dark:#b68f34;
+
+    --brown:#46362d;
+    --brown-light:#6b574b;
+
+    --white:#ffffff;
+
+    --shadow:0 15px 40px rgba(0,0,0,.08);
+
+    --radius:22px;
+
+    --transition:.30s ease;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--cream);
+    color:var(--brown);
+    font-family:"Inter",sans-serif;
+    overflow-x:hidden;
+}
+
+img{
+    display:block;
+    max-width:100%;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.container{
+    width:min(1200px,92%);
+    margin:auto;
+}
+
+/* ===========================
+   NAVBAR
+=========================== */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:rgba(251,247,240,.92);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(0,0,0,.05);
+}
+
+.nav-wrapper{
+    height:85px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo-area img{
+    width:54px;
+    height:54px;
+
+    background:var(--sage);
+
+    border-radius:15px;
+
+    padding:8px;
+}
+
+.logo-text h1{
+    font-family:"Playfair Display",serif;
+    font-size:1.45rem;
+}
+
+.logo-text span{
+    color:var(--brown-light);
+    font-size:.85rem;
+}
+
+.nav-links{
+    display:flex;
+    gap:28px;
+}
+
+.nav-links a{
+    font-weight:600;
+    transition:var(--transition);
+}
+
+.nav-links a:hover{
+    color:var(--sage);
+}
+
+/* ===========================
+   HERO
+=========================== */
+
+.hero{
+
+    padding:90px 0 70px;
+
+    background:
+
+    radial-gradient(circle at top left,
+    rgba(212,173,73,.18),
+    transparent 30%),
+
+    radial-gradient(circle at bottom right,
+    rgba(120,139,115,.18),
+    transparent 30%),
+
+    linear-gradient(
+        180deg,
+        #f7f1e7,
+        #fbf7f0
+    );
+}
+
+.hero-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1.2fr
+    .8fr;
+
+    gap:45px;
+
+    align-items:center;
+}
+
+.hero h1{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:clamp(3rem,6vw,5rem);
+
+    line-height:1.05;
+
+    margin-bottom:18px;
+}
+
+.hero p{
+
+    color:var(--brown-light);
+
+    font-size:1.08rem;
+
+    max-width:650px;
+
+    margin-bottom:35px;
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+}
+
+.button{
+
+    padding:15px 28px;
+
+    border-radius:999px;
+
+    font-weight:700;
+
+    transition:var(--transition);
+
+    cursor:pointer;
+}
+
+.button-primary{
+
+    background:var(--sage);
+
+    color:white;
+
+    box-shadow:
+    0 10px 30px rgba(120,139,115,.25);
+}
+
+.button-primary:hover{
+
+    background:var(--sage-dark);
+
+    transform:translateY(-3px);
+}
+
+.button-secondary{
+
+    background:white;
+
+    border:1px solid rgba(0,0,0,.08);
+}
+
+.button-secondary:hover{
+
+    transform:translateY(-3px);
+
+    background:#fff;
+}
+
+/* Right Hero Card */
+
+.hero-card{
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
+}
+
+.hero-card img{
+
+    width:90px;
+
+    margin-bottom:20px;
+}
+
+.hero-card h2{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:2rem;
+
+    margin-bottom:15px;
+}
+
+.hero-card p{
+
+    margin:0;
+
+    color:var(--brown-light);
+}
+/* =========================================================
+   SEARCH & FILTERS
+========================================================= */
+
+.filter-section{
+
+    padding:50px 0 35px;
+
+    background:var(--cream);
+
+}
+
+.search-box{
+
+    max-width:700px;
+
+    margin:0 auto 30px;
+
+}
+
+.search-box input{
+
+    width:100%;
+
+    padding:18px 24px;
+
+    border:none;
+
+    border-radius:999px;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+
+    font-size:1rem;
+
+    color:var(--brown);
+
+    transition:var(--transition);
+
+}
+
+.search-box input:focus{
+
+    outline:none;
+
+    box-shadow:
+    0 0 0 4px rgba(120,139,115,.18);
+
+}
+
+.filter-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:14px;
+
+    flex-wrap:wrap;
+
+}
+
+.filter-btn{
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:999px;
+
+    background:white;
+
+    color:var(--brown);
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    transition:var(--transition);
+
+    box-shadow:0 5px 18px rgba(0,0,0,.05);
+
+}
+
+.filter-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:var(--sage-light);
+
+}
+
+.filter-btn.active{
+
+    background:var(--sage);
+
+    color:white;
+
+}
+
+/* =========================================================
+   FLAVOR GRID
+========================================================= */
+
+.flavors-section{
+
+    padding:40px 0 90px;
+
+}
+
+.flavor-grid{
+
+    display:grid;
+
+    grid-template-columns:
+
+    repeat(auto-fit,minmax(320px,1fr));
+
+    gap:28px;
+
+    align-items:start;
+
+}
+
+/* =========================================================
+
+   SECTION TITLE
+
+========================================================= */
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:45px;
+
+}
+
+.section-title h2{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:clamp(2rem,4vw,3rem);
+
+    color:var(--brown);
+
+    margin-bottom:12px;
+
+}
+
+.section-title p{
+
+    max-width:700px;
+
+    margin:auto;
+
+    color:var(--brown-light);
+
+    line-height:1.7;
+
+}
+/* =========================================================
+   FLAVOR CARDS
+========================================================= */
+
+.flavor-card{
+
+    background:var(--white);
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+    transition:var(--transition);
+
+    border:1px solid rgba(70,54,45,.06);
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100%;
+
+}
+
+.flavor-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 25px 55px rgba(0,0,0,.12);
+
+}
+
+.flavor-image{
+
+    width:100%;
+
+    height:250px;
+
+    object-fit:cover;
+
+    background:#ececec;
+
+}
+
+.flavor-info{
+
+    padding:24px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    flex:1;
+
+}
+
+.flavor-category{
+
+    display:inline-block;
+
+    align-self:flex-start;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:rgba(120,139,115,.12);
+
+    color:var(--sage-dark);
+
+    font-size:.82rem;
+
+    font-weight:700;
+
+    margin-bottom:16px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.05em;
+
+}
+
+.flavor-name{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:2rem;
+
+    color:var(--brown);
+
+    margin-bottom:12px;
+
+}
+
+.flavor-description{
+
+    color:var(--brown-light);
+
+    line-height:1.7;
+
+    margin-bottom:22px;
+
+    flex:1;
+
+}
+
+.flavor-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.flavor-price{
+
+    font-size:1.45rem;
+
+    font-weight:800;
+
+    color:var(--sage);
+
+}
+
+.featured-badge{
+
+    background:var(--gold);
+
+    color:#2f241d;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:.82rem;
+
+    font-weight:700;
+
+}
+
+.available-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:18px;
+
+    color:#2c7c3f;
+
+    font-weight:700;
+
+}
+
+.available-badge::before{
+
+    content:"";
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#2c7c3f;
+
+}
+
+.unavailable{
+
+    opacity:.55;
+
+}
+
+.unavailable .available-badge{
+
+    color:#b43c3c;
+
+}
+
+.unavailable .available-badge::before{
+
+    background:#b43c3c;
+
+}
+
+.loading{
+
+    text-align:center;
+
+    padding:70px;
+
+    color:var(--brown-light);
+
+    font-size:1.1rem;
+
+}
+
+.empty-state{
+
+    text-align:center;
+
+    padding:90px 20px;
+
+}
+
+.empty-state h2{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:2.3rem;
+
+    color:var(--brown);
+
+    margin-bottom:15px;
+
+}
+
+.empty-state p{
+
+    color:var(--brown-light);
+
+    font-size:1rem;
+
+}
+/* =========================================================
+   PART 4
+   ANIMATIONS • FOOTER • RESPONSIVE
+========================================================= */
+
+/* Fade Animation */
+
+.fade-in{
+
+    opacity:0;
+
+    transform:translateY(30px);
+
+    animation:fadeUp .8s ease forwards;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+        transform:translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Floating Hover */
+
+.flavor-card:hover .flavor-image{
+
+    transform:scale(1.05);
+
+}
+
+.flavor-image{
+
+    transition:.45s ease;
+
+}
+
+/* Hero Decoration */
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    background:rgba(212,173,73,.10);
+
+    top:-120px;
+    right:-120px;
+
+    z-index:0;
+
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:rgba(120,139,115,.10);
+
+    bottom:-100px;
+    left:-100px;
+
+    z-index:0;
+
+}
+
+.hero>*{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/* Footer */
+
+.footer{
+
+    margin-top:80px;
+
+    background:var(--brown);
+
+    color:white;
+
+    padding:55px 0;
+
+}
+
+.footer-content{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:0 25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:40px;
+
+    flex-wrap:wrap;
+
+}
+
+.footer-logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.footer-logo img{
+
+    width:60px;
+
+}
+
+.footer-logo h3{
+
+    font-family:"Playfair Display",serif;
+
+    font-size:1.8rem;
+
+}
+
+.footer-links{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.footer-links a{
+
+    color:white;
+
+    opacity:.85;
+
+    transition:.3s;
+
+}
+
+.footer-links a:hover{
+
+    opacity:1;
+
+    color:var(--gold);
+
+}
+
+/* Responsive */
+
+@media (max-width:1000px){
+
+.hero-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.hero-card{
+
+margin-top:25px;
+
+}
+
+}
+
+@media (max-width:768px){
+
+.hero{
+
+padding:70px 0;
+
+}
+
+.hero h1{
+
+font-size:2.8rem;
+
+}
+
+.filter-buttons{
+
+justify-content:flex-start;
+
+overflow-x:auto;
+
+padding-bottom:8px;
+
+}
+
+.filter-buttons::-webkit-scrollbar{
+
+display:none;
+
+}
+
+.flavor-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.footer-content{
+
+text-align:center;
+
+justify-content:center;
+
+}
+
+.footer-logo{
+
+justify-content:center;
+
+}
+
+}
+
+@media (max-width:500px){
+
+.hero h1{
+
+font-size:2.3rem;
+
+}
+
+.flavor-image{
+
+height:220px;
+
+}
+
+.flavor-name{
+
+font-size:1.6rem;
+
+}
+
+.flavor-price{
+
+font-size:1.2rem;
+
+}
+
+.filter-btn{
+
+padding:10px 18px;
+
+font-size:.9rem;
+
+}
+
+/* =========================================================
+   PART 5
+   FINAL POLISH
+========================================================= */
+
+/* Custom Scrollbar */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:var(--cream);
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--sage);
+
+    border-radius:999px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--sage-dark);
+
+}
+
+/* Selection */
+
+::selection{
+
+    background:var(--gold);
+
+    color:var(--brown);
+
+}
+
+/* Focus */
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+
+    box-shadow:
+        0 0 0 4px rgba(120,139,115,.18);
+
+}
+
+/* Images */
+
+.flavor-image{
+
+    background:#f5f5f5;
+
+}
+
+.flavor-image[src="placeholder.png"]{
+
+    object-fit:contain;
+
+    padding:30px;
+
+}
+
+/* Price */
+
+.flavor-price::after{
+
+    content:"";
+
+    display:block;
+
+    width:40px;
+
+    height:3px;
+
+    background:var(--gold);
+
+    border-radius:999px;
+
+    margin-top:6px;
+
+}
+
+/* Card Hover */
+
+.flavor-card:hover .flavor-name{
+
+    color:var(--sage-dark);
+
+}
+
+/* Smooth Transitions */
+
+button,
+input,
+select,
+textarea,
+.flavor-card,
+.flavor-image,
+.featured-badge,
+.filter-btn{
+
+    transition:all .3s ease;
+
+}
+
+/* Loading Spinner */
+
+.loading::before{
+
+    content:"🍨";
+
+    display:block;
+
+    font-size:2rem;
+
+    margin-bottom:15px;
+
+    animation:spin 2s linear infinite;
+
+}
+
+@keyframes spin{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+/* Footer Copyright */
+
+.footer small{
+
+    display:block;
+
+    margin-top:18px;
+
+    opacity:.75;
+
+}
+
+/* Print */
+
+@media print{
+
+    .navbar,
+    .footer,
+    .hero,
+    .filter-section{
+
+        display:none;
+
+    }
+
+    body{
+
+        background:white;
+
+    }
+
+    .flavor-card{
+
+        page-break-inside:avoid;
+
+        box-shadow:none;
+
+        border:1px solid #ddd;
+
+    }
+
+}
+
+/* End */
+
+body{
+
+    animation:fadeUp .5s ease;
+
+}
