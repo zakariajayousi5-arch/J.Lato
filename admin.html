@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J.Lato Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="admin.css">
+
+    <script type="module" src="admin.js"></script>
+</head>
+
+<body>
+
+<div class="login-screen" id="loginScreen">
+
+    <div class="login-card">
+
+        <img src="logo.png" class="login-logo" alt="J.Lato">
+
+        <h1>J.Lato</h1>
+
+        <p>Administration Dashboard</p>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Password">
+
+        <button id="loginButton">
+            Login
+        </button>
+
+    </div>
+
+</div>
+
+<div class="dashboard hidden" id="dashboard">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <img src="logo.png" class="sidebar-logo">
+
+            <h2>J.Lato</h2>
+
+        </div>
+
+        <nav>
+
+            <button class="nav-button active">
+                📊 Dashboard
+            </button>
+
+            <button class="nav-button">
+                🍨 Flavors
+            </button>
+
+            <button class="nav-button">
+                ⭐ Featured
+            </button>
+
+            <button class="nav-button">
+                📂 Categories
+            </button>
+
+            <button class="nav-button">
+                🖼 Images
+            </button>
+
+            <button class="nav-button">
+                ⚙ Settings
+            </button>
+
+        </nav>
+
+    </aside>
+
+    <main class="content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Dashboard</h1>
+
+                <p>
+                    Welcome back.
+                </p>
+
+            </div>
+
+            <button id="saveButton">
+                💾 Save Changes
+            </button>
+
+        </header>
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <h2 id="flavorCount">
+                    0
+                </h2>
+
+                <span>
+                    Total Flavors
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2 id="categoryCount">
+                    0
+                </h2>
+
+                <span>
+                    Categories
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2 id="featuredCount">
+                    0
+                </h2>
+
+                <span>
+                    Featured
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2 id="availableCount">
+                    0
+                </h2>
+
+                <span>
+                    Available
+                </span>
+
+            </div>
+
+        </section>
+
+        <section class="toolbar">
+
+            <input
+                id="searchInput"
+                placeholder="Search flavors...">
+
+            <button id="addFlavor">
+
+                ➕
+
+                Add Flavor
+
+            </button>
+
+        </section>
+
+        <section
+            id="flavorContainer"
+            class="flavor-container">
+ 				<!-- Flavor Card -->
+
+<div class="flavor-card">
+
+    <div class="image-section">
+
+        <img src="placeholder.png"
+             class="flavor-image"
+             alt="Flavor">
+
+        <input
+            type="file"
+            accept="image/*"
+            class="image-upload">
+
+    </div>
+
+    <div class="flavor-details">
+
+        <div class="row">
+
+            <div class="field">
+
+                <label>Flavor Name</label>
+
+                <input
+                    type="text"
+                    placeholder="Belgian Berry">
+
+            </div>
+
+            <div class="field small">
+
+                <label>Price</label>
+
+                <input
+                    type="number"
+                    placeholder="43">
+
+            </div>
+
+        </div>
+
+        <div class="field">
+
+            <label>Description</label>
+
+            <textarea
+                rows="4"
+                placeholder="Flavor description..."></textarea>
+
+        </div>
+
+        <div class="row">
+
+            <div class="field">
+
+                <label>Category</label>
+
+                <select>
+
+                    <option>Popular</option>
+
+                    <option>Must Try</option>
+
+                    <option>Our Creation</option>
+
+                    <option>Classic</option>
+
+                    <option>Seasonal</option>
+
+                </select>
+
+            </div>
+
+            <div class="field">
+
+                <label>Status</label>
+
+                <select>
+
+                    <option>Available</option>
+
+                    <option>Unavailable</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="switches">
+
+            <label>
+
+                <input type="checkbox">
+
+                Featured Flavor
+
+            </label>
+
+            <label>
+
+                <input type="checkbox" checked>
+
+                Show on Website
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <button class="duplicate">
+
+            📄 Duplicate
+
+        </button>
+
+        <button class="delete">
+
+            🗑 Delete
+
+        </button>
+
+    </div>
+
+</div>
+
+        </section>
+			<!-- Add Flavor Modal -->
+
+<div class="modal hidden" id="addFlavorModal">
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h2>Add New Flavor</h2>
+
+            <button class="close-modal">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="field">
+
+                <label>Flavor Name</label>
+
+                <input
+                    id="newFlavorName"
+                    type="text"
+                    placeholder="Chocolate">
+
+            </div>
+
+            <div class="field">
+
+                <label>Price (AED)</label>
+
+                <input
+                    id="newFlavorPrice"
+                    type="number"
+                    placeholder="43">
+
+            </div>
+
+            <div class="field">
+
+                <label>Description</label>
+
+                <textarea
+                    id="newFlavorDescription"
+                    rows="5"
+                    placeholder="Describe this flavor..."></textarea>
+
+            </div>
+
+            <div class="field">
+
+                <label>Category</label>
+
+                <select id="newFlavorCategory">
+
+                    <option>Popular</option>
+                    <option>Must Try</option>
+                    <option>Our Creation</option>
+                    <option>Classic</option>
+                    <option>Seasonal</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button class="cancel-button">
+                Cancel
+            </button>
+
+            <button class="save-button">
+                Add Flavor
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Delete Confirmation -->
+
+<div class="modal hidden" id="deleteModal">
+
+    <div class="modal-card small">
+
+        <h2>Delete Flavor?</h2>
+
+        <p>
+
+            This action cannot be undone.
+
+        </p>
+
+        <div class="modal-footer">
+
+            <button class="cancel-button">
+
+                Cancel
+
+            </button>
+
+            <button class="delete-button">
+
+                Delete
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Floating Save -->
+
+<button
+    class="floating-save"
+    id="floatingSave">
+
+    💾 Save All Changes
+
+</button>
+
+<!-- Toast -->
+
+<div
+    id="toast"
+    class="toast">
+
+    Saved Successfully
+
+</div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
