@@ -1,374 +1,553 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J.Lato Admin Dashboard</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="UTF-8">
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="admin.css">
+<title>
 
-    <script type="module" src="admin.js"></script>
+J.Lato Admin CMS
+
+</title>
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet">
+
+<link
+      rel="stylesheet"
+      href="admin.css">
+
+<script
+        type="module"
+        src="admin-v2.js"
+        defer>
+</script>
+
 </head>
 
 <body>
 
-<div class="login-screen" id="loginScreen">
+<!-- LOGIN -->
+
+<div
+     id="loginScreen"
+     class="login-screen">
 
     <div class="login-card">
 
-        <img src="logo.png" class="login-logo" alt="J.Lato">
+        <img
+             src="logo.png"
+             class="login-logo"
+             alt="J.Lato">
 
-        <h1>J.Lato</h1>
+        <h1>
 
-        <p>Administration Dashboard</p>
+            J.Lato
+
+        </h1>
+
+        <p>
+
+            Content Management System
+
+        </p>
 
         <input
-            id="password"
-            type="password"
-            placeholder="Password">
 
-        <button id="loginButton">
+               id="password"
+
+               type="password"
+
+               placeholder="Enter Password"
+
+               autocomplete="off">
+
+        <button
+
+                id="loginButton">
+
             Login
+
         </button>
+
+        <p
+           id="loginMessage"
+           class="login-message">
+
+        </p>
 
     </div>
 
 </div>
 
-<div class="dashboard hidden" id="dashboard">
+<!-- APP -->
+
+<div
+     id="app"
+     class="app hidden">
+
+    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
-        <div class="sidebar-header">
+        <div class="brand">
 
-            <img src="logo.png" class="sidebar-logo">
+            <img
+                 src="logo.png"
+                 alt="Logo">
 
-            <h2>J.Lato</h2>
+            <div>
+
+                <h2>
+
+                    J.Lato
+
+                </h2>
+
+                <span>
+
+                    Admin 
+
+                </span>
+
+            </div>
 
         </div>
 
         <nav>
 
-            <button class="nav-button active">
+            <button
+                    class="menu-button active"
+                    data-page="dashboard">
+
                 📊 Dashboard
+
             </button>
 
-            <button class="nav-button">
+            <button
+                    class="menu-button"
+                    data-page="flavors">
+
                 🍨 Flavors
+
             </button>
 
-            <button class="nav-button">
-                ⭐ Featured
-            </button>
+            <button
+                    class="menu-button"
+                    data-page="categories">
 
-            <button class="nav-button">
                 📂 Categories
+
             </button>
 
-            <button class="nav-button">
+            <button
+                    class="menu-button"
+                    data-page="images">
+
                 🖼 Images
+
             </button>
 
-            <button class="nav-button">
+            <button
+                    class="menu-button"
+                    data-page="settings">
+
                 ⚙ Settings
+
             </button>
 
         </nav>
 
     </aside>
 
-    <main class="content">
+    <!-- MAIN -->
+
+    <main class="main-content">
 
         <header class="topbar">
 
             <div>
 
-                <h1>Dashboard</h1>
+                <h1
+                    id="pageTitle">
+
+                    Dashboard
+
+                </h1>
 
                 <p>
-                    Welcome back.
+
+                    
+
                 </p>
 
             </div>
 
-            <button id="saveButton">
-                💾 Save Changes
+            <button
+                    id="logoutButton">
+
+                Logout
+
             </button>
 
         </header>
+<!-- DASHBOARD PAGE -->
 
-        <section class="stats">
+<section
+    id="dashboardPage"
+    class="page active-page">
 
-            <div class="stat-card">
+    <div class="stats-grid">
 
-                <h2 id="flavorCount">
+        <div class="stat-card">
+
+            <span class="stat-icon">🍨</span>
+
+            <div>
+
+                <h2 id="totalFlavors">
+
                     0
+
                 </h2>
 
-                <span>
+                <p>
+
                     Total Flavors
-                </span>
+
+                </p>
 
             </div>
 
-            <div class="stat-card">
+        </div>
+
+        <div class="stat-card">
+
+            <span class="stat-icon">✅</span>
+
+            <div>
+
+                <h2 id="availableFlavors">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Available
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <span class="stat-icon">⭐</span>
+
+            <div>
+
+                <h2 id="featuredFlavors">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Featured
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <span class="stat-icon">📂</span>
+
+            <div>
 
                 <h2 id="categoryCount">
+
                     0
+
                 </h2>
 
-                <span>
+                <p>
+
                     Categories
-                </span>
+
+                </p>
 
             </div>
 
-            <div class="stat-card">
+        </div>
 
-                <h2 id="featuredCount">
-                    0
-                </h2>
+    </div>
 
-                <span>
-                    Featured
-                </span>
+    <div class="dashboard-grid">
 
-            </div>
+        <section class="dashboard-card">
 
-            <div class="stat-card">
+            <h2>
 
-                <h2 id="availableCount">
-                    0
-                </h2>
+                Quick Actions
 
-                <span>
-                    Available
-                </span>
+            </h2>
+
+            <div class="quick-buttons">
+
+                <button
+                    id="quickAddFlavor">
+
+                    ➕ Add Flavor
+
+                </button>
+
+                <button
+                    id="quickManageCategories">
+
+                    📂 Categories
+
+                </button>
+
+                <button
+                    id="quickImages">
+
+                    🖼 Images
+
+                </button>
+
+                <button
+                    id="quickSettings">
+
+                    ⚙ Settings
+
+                </button>
 
             </div>
 
         </section>
 
-        <section class="toolbar">
+        <section class="dashboard-card">
+
+            <h2>
+
+                System Status
+
+            </h2>
+
+            <ul class="status-list">
+
+                <li>
+
+                    <span>Firebase</span>
+
+                    <strong id="firebaseStatus">
+
+                        Connected
+
+                    </strong>
+
+                </li>
+
+                <li>
+
+                    <span>Database</span>
+
+                    <strong id="databaseStatus">
+
+                        Ready
+
+                    </strong>
+
+                </li>
+
+                <li>
+
+                    <span>Website</span>
+
+                    <strong id="websiteStatus">
+
+                        Online
+
+                    </strong>
+
+                </li>
+
+            </ul>
+
+        </section>
+
+    </div>
+
+</section>
+<!-- FLAVORS PAGE -->
+
+<section
+    id="flavorsPage"
+    class="page">
+
+    <div class="page-toolbar">
+
+        <div class="search-box">
 
             <input
-                id="searchInput"
+                id="searchFlavor"
+                type="text"
                 placeholder="Search flavors...">
 
-            <button id="addFlavor">
-
-                ➕
-
-                Add Flavor
-
-            </button>
-
-        </section>
-
-        <section
-            id="flavorContainer"
-            class="flavor-container">
- 				<!-- Flavor Card -->
-
-<div class="flavor-card">
-
-    <div class="image-section">
-
-        <img src="placeholder.png"
-             class="flavor-image"
-             alt="Flavor">
-
-        <input
-            type="file"
-            accept="image/*"
-            class="image-upload">
-
-    </div>
-
-    <div class="flavor-details">
-
-        <div class="row">
-
-            <div class="field">
-
-                <label>Flavor Name</label>
-
-                <input
-                    type="text"
-                    placeholder="Belgian Berry">
-
-            </div>
-
-            <div class="field small">
-
-                <label>Price</label>
-
-                <input
-                    type="number"
-                    placeholder="43">
-
-            </div>
-
         </div>
 
-        <div class="field">
+        <button
+            id="addFlavorButton"
+            class="primary-button">
 
-            <label>Description</label>
-
-            <textarea
-                rows="4"
-                placeholder="Flavor description..."></textarea>
-
-        </div>
-
-        <div class="row">
-
-            <div class="field">
-
-                <label>Category</label>
-
-                <select>
-
-                    <option>Popular</option>
-
-                    <option>Must Try</option>
-
-                    <option>Our Creation</option>
-
-                    <option>Classic</option>
-
-                    <option>Seasonal</option>
-
-                </select>
-
-            </div>
-
-            <div class="field">
-
-                <label>Status</label>
-
-                <select>
-
-                    <option>Available</option>
-
-                    <option>Unavailable</option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-        <div class="switches">
-
-            <label>
-
-                <input type="checkbox">
-
-                Featured Flavor
-
-            </label>
-
-            <label>
-
-                <input type="checkbox" checked>
-
-                Show on Website
-
-            </label>
-
-        </div>
-
-    </div>
-
-    <div class="actions">
-
-        <button class="duplicate">
-
-            📄 Duplicate
-
-        </button>
-
-        <button class="delete">
-
-            🗑 Delete
+            ➕ Add Flavor
 
         </button>
 
     </div>
 
-</div>
+    <div
+        id="flavorList"
+        class="flavor-list">
 
-        </section>
-			<!-- Add Flavor Modal -->
+        <!-- Flavor cards appear here -->
 
-<div class="modal hidden" id="addFlavorModal">
+    </div>
 
-    <div class="modal-card">
+</section>
+
+<!-- FLAVOR EDITOR MODAL -->
+
+<div
+    id="flavorModal"
+    class="modal hidden">
+
+    <div class="modal-card large">
 
         <div class="modal-header">
 
-            <h2>Add New Flavor</h2>
+            <h2 id="modalTitle">
 
-            <button class="close-modal">
+                New Flavor
+
+            </h2>
+
+            <button
+                id="closeFlavorModal">
+
                 ✕
+
             </button>
 
         </div>
 
         <div class="modal-body">
 
-            <div class="field">
+            <div class="image-panel">
 
-                <label>Flavor Name</label>
+                <img
+                    id="previewImage"
+                    src="placeholder.png"
+                    alt="Preview">
 
                 <input
-                    id="newFlavorName"
+                    id="imageURL"
                     type="text"
-                    placeholder="Chocolate">
-
-            </div>
-
-            <div class="field">
-
-                <label>Price (AED)</label>
+                    placeholder="Paste Image URL">
 
                 <input
-                    id="newFlavorPrice"
-                    type="number"
-                    placeholder="43">
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*">
 
             </div>
 
-            <div class="field">
+            <div class="editor-panel">
 
-                <label>Description</label>
+                <label>
+
+                    Flavor Name
+
+                </label>
+
+                <input
+                    id="flavorName"
+                    type="text">
+
+                <label>
+
+                    Price (AED)
+
+                </label>
+
+                <input
+                    id="flavorPrice"
+                    type="number">
+
+                <label>
+
+                    Description
+
+                </label>
 
                 <textarea
-                    id="newFlavorDescription"
-                    rows="5"
-                    placeholder="Describe this flavor..."></textarea>
+                    id="flavorDescription"
+                    rows="5"></textarea>
 
-            </div>
+                <label>
 
-            <div class="field">
+                    Category
 
-                <label>Category</label>
+                </label>
 
-                <select id="newFlavorCategory">
-
-                    <option>Popular</option>
-                    <option>Must Try</option>
-                    <option>Our Creation</option>
-                    <option>Classic</option>
-                    <option>Seasonal</option>
+                <select
+                    id="flavorCategory">
 
                 </select>
+
+                <div class="switch-group">
+
+                    <label>
+
+                        <input
+                            id="featuredSwitch"
+                            type="checkbox">
+
+                        Featured Flavor
+
+                    </label>
+
+                    <label>
+
+                        <input
+                            id="availableSwitch"
+                            type="checkbox"
+                            checked>
+
+                        Available
+
+                    </label>
+
+                </div>
 
             </div>
 
@@ -376,12 +555,27 @@
 
         <div class="modal-footer">
 
-            <button class="cancel-button">
-                Cancel
+            <button
+                id="deleteFlavor"
+                class="danger-button">
+
+                🗑 Delete
+
             </button>
 
-            <button class="save-button">
-                Add Flavor
+            <button
+                id="duplicateFlavor">
+
+                📄 Duplicate
+
+            </button>
+
+            <button
+                id="saveFlavor"
+                class="primary-button">
+
+                💾 Save Flavor
+
             </button>
 
         </div>
@@ -389,14 +583,175 @@
     </div>
 
 </div>
+<!-- CATEGORIES PAGE -->
 
-<!-- Delete Confirmation -->
+<section
+    id="categoriesPage"
+    class="page">
 
-<div class="modal hidden" id="deleteModal">
+    <div class="page-toolbar">
+
+        <h2>
+
+            Categories
+
+        </h2>
+
+        <button
+            id="addCategoryButton"
+            class="primary-button">
+
+            ➕ New Category
+
+        </button>
+
+    </div>
+
+    <div
+        id="categoryList"
+        class="category-list">
+
+        <!-- Categories appear here -->
+
+    </div>
+
+</section>
+
+<!-- IMAGES PAGE -->
+
+<section
+    id="imagesPage"
+    class="page">
+
+    <div class="page-toolbar">
+
+        <h2>
+
+            Image Library
+
+        </h2>
+
+        <button
+            id="uploadImageButton"
+            class="primary-button">
+
+            📤 Upload Image
+
+        </button>
+
+    </div>
+
+    <input
+        id="imageLibraryUpload"
+        type="file"
+        accept="image/*"
+        multiple
+        hidden>
+
+    <div
+        id="imageLibrary"
+        class="image-library">
+
+        <!-- Images appear here -->
+
+    </div>
+
+</section>
+
+<!-- SETTINGS PAGE -->
+
+<section
+    id="settingsPage"
+    class="page">
+
+    <div class="settings-grid">
+
+        <div class="settings-card">
+
+            <h2>
+
+                Store Information
+
+            </h2>
+
+            <label>
+
+                Store Name
+
+            </label>
+
+            <input
+                id="storeName"
+                type="text"
+                value="J.Lato">
+
+            <label>
+
+                Currency
+
+            </label>
+
+            <input
+                id="currency"
+                type="text"
+                value="AED">
+
+            <label>
+
+                Contact Number
+
+            </label>
+
+            <input
+                id="phoneNumber"
+                type="text">
+
+        </div>
+
+        <div class="settings-card">
+
+            <h2>
+
+                Opening Hours
+
+            </h2>
+
+            <textarea
+                id="openingHours"
+                rows="8">Mon 2:00 PM - 12:00 AM
+Tue 11:00 AM - 12:00 AM
+Wed 11:00 AM - 12:00 AM
+Thu 11:00 AM - 12:00 AM
+Fri 11:00 AM - 12:00 AM
+Sat 11:00 AM - 12:00 AM
+Sun 11:00 AM - 12:00 AM</textarea>
+
+            <button
+                id="saveSettings"
+                class="primary-button">
+
+                💾 Save Settings
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- CONFIRM DELETE MODAL -->
+
+<div
+    id="confirmModal"
+    class="modal hidden">
 
     <div class="modal-card small">
 
-        <h2>Delete Flavor?</h2>
+        <h2>
+
+            Delete Flavor?
+
+        </h2>
 
         <p>
 
@@ -406,13 +761,16 @@
 
         <div class="modal-footer">
 
-            <button class="cancel-button">
+            <button
+                id="cancelDelete">
 
                 Cancel
 
             </button>
 
-            <button class="delete-button">
+            <button
+                id="confirmDelete"
+                class="danger-button">
 
                 Delete
 
@@ -424,17 +782,27 @@
 
 </div>
 
-<!-- Floating Save -->
+<!-- LOADING OVERLAY -->
 
-<button
-    class="floating-save"
-    id="floatingSave">
+<div
+    id="loadingOverlay"
+    class="loading-overlay hidden">
 
-    💾 Save All Changes
+    <div class="loading-card">
 
-</button>
+        <div class="spinner"></div>
 
-<!-- Toast -->
+        <p>
+
+            Saving changes...
+
+        </p>
+
+    </div>
+
+</div>
+
+<!-- TOAST -->
 
 <div
     id="toast"
@@ -444,9 +812,28 @@
 
 </div>
 
-    </main>
+<!-- FOOTER -->
+
+<footer class="admin-footer">
+
+    <p>
+
+        © 2026 J.Lato Gelateria & Café
+
+    </p>
+
+    <span>
+
+        Powered by Firebase
+
+    </span>
+
+</footer>
+
+</main>
 
 </div>
 
 </body>
+
 </html>
