@@ -1,88 +1,86 @@
-import { db } from "./firebase.js";
+/*==================================================
+    J.Lato Admin
+==================================================*/
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
 import {
+
+    getFirestore,
     collection,
-    addDoc,
     getDocs,
+    addDoc,
     updateDoc,
     deleteDoc,
-    doc,
-    query,
-    orderBy
+    doc
+
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-/* ==========================================
-   DATABASE
-========================================== */
+/*==================================================
+    Firebase
+==================================================*/
 
-const flavorsCollection = collection(db, "flavors");
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBXS-qRlVntS76T56_vnbF9N3msp7djQ4g",
+
+    authDomain: "jlato-admin-576e1.firebaseapp.com",
+
+    projectId: "jlato-admin-576e1",
+
+    storageBucket: "jlato-admin-576e1.firebasestorage.app",
+
+    messagingSenderId: "989085177669",
+
+    appId: "1:989085177669:web:9f02b633f1e8b62e85d02c"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+/*==================================================
+    Password
+==================================================*/
+
+const ADMIN_PASSWORD = "jlato123";
+
+/*==================================================
+    Global Variables
+==================================================*/
 
 let flavors = [];
 
-let editingFlavor = null;
+let categories = [];
 
-/* ==========================================
-   LOGIN
-========================================== */
+let selectedFlavor = null;
+
+/*==================================================
+    Elements
+==================================================*/
 
 const loginScreen = document.getElementById("loginScreen");
-const dashboard = document.getElementById("dashboard");
+
+const appContainer = document.getElementById("app");
 
 const passwordInput = document.getElementById("password");
+
 const loginButton = document.getElementById("loginButton");
 
-const PASSWORD = "JLato2026";
+const loginMessage = document.getElementById("loginMessage");
 
-/* ==========================================
-   MAIN ELEMENTS
-========================================== */
+const logoutButton = document.getElementById("logoutButton");
 
-const flavorContainer =
-document.getElementById("flavorContainer");
-
-const addFlavorButton =
-document.getElementById("addFlavor");
-
-const addFlavorModal =
-document.getElementById("addFlavorModal");
-
-const deleteModal =
-document.getElementById("deleteModal");
-
-const saveButton =
-document.getElementById("saveButton");
-
-const floatingSave =
-document.getElementById("floatingSave");
-
-const toast =
-document.getElementById("toast");
-
-/* ==========================================
-   NEW FLAVOR INPUTS
-========================================== */
-
-const newFlavorName =
-document.getElementById("newFlavorName");
-
-const newFlavorPrice =
-document.getElementById("newFlavorPrice");
-
-const newFlavorDescription =
-document.getElementById("newFlavorDescription");
-
-const newFlavorCategory =
-document.getElementById("newFlavorCategory");
-
-/* ==========================================
-   LOGIN
-========================================== */
+/*==================================================
+    Login
+==================================================*/
 
 loginButton.addEventListener("click", login);
 
-passwordInput.addEventListener("keydown",(e)=>{
+passwordInput.addEventListener("keydown", (event) => {
 
-    if(e.key==="Enter"){
+    if (event.key === "Enter") {
 
         login();
 
@@ -90,271 +88,516 @@ passwordInput.addEventListener("keydown",(e)=>{
 
 });
 
-function login(){
+function login() {
 
-    if(passwordInput.value!==PASSWORD){
+    if (passwordInput.value.trim() === ADMIN_PASSWORD) {
 
-        alert("Wrong password.");
+        loginScreen.classList.add("hidden");
 
-        return;
+        appContainer.classList.remove("hidden");
+
+        loginMessage.textContent = "";
+
+        passwordInput.value = "";
+
+        console.log("Admin logged in.");
 
     }
 
-    loginScreen.classList.add("hidden");
+    else {
 
-    dashboard.classList.remove("hidden");
+        loginMessage.textContent = "Incorrect password.";
 
-    loadFlavors();
+        passwordInput.select();
 
-}
-
-/* ==========================================
-   TOAST
-========================================== */
-
-function showToast(text){
-
-    toast.innerHTML=text;
-
-    toast.classList.add("show");
-
-    setTimeout(()=>{
-
-        toast.classList.remove("show");
-
-    },2500);
+    }
 
 }
-/* ==========================================
-   LOAD FLAVORS FROM FIREBASE
-========================================== */
 
-async function loadFlavors() {
+/*==================================================
+    Logout
+==================================================*/
 
-    flavors = [];
+logoutButton.addEventListener("click", () => {
 
-    const q = query(
-        flavorsCollection,
-        orderBy("name")
-    );
+    appContainer.classList.add("hidden");
 
-    const snapshot = await getDocs(q);
+    loginScreen.classList.remove("hidden");
 
-    snapshot.forEach((document)=>{
+});
+/*==================================================
+    Navigation
+==================================================*/
 
-        flavors.push({
+const menuButtons = document.querySelectorAll(".menu-button");
 
-            id:document.id,
+const pageTitle = document.getElementById("pageTitle");
 
-            ...document.data()
+const pages = {
 
-        });
+    dashboard: document.getElementById("dashboardPage"),
+
+    flavors: document.getElementById("flavorsPage"),
+
+    categories: document.getElementById("categoriesPage"),
+
+    images: document.getElementById("imagesPage"),
+
+    settings: document.getElementById("settingsPage")
+
+};
+
+menuButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        openPage(button.dataset.page);
 
     });
 
-    renderFlavors();
+});
+
+function openPage(page) {
+
+    document.querySelectorAll(".page").forEach(section => {
+
+        section.classList.remove("active-page");
+
+    });
+
+    menuButtons.forEach(button => {
+
+        button.classList.remove("active");
+
+    });
+
+    if (pages[page]) {
+
+        pages[page].classList.add("active-page");
+
+    }
+
+    document.querySelector(`[data-page="${page}"]`).classList.add("active");
+
+    pageTitle.textContent =
+
+        page.charAt(0).toUpperCase() + page.slice(1);
 
 }
 
-/* ==========================================
-   RENDER FLAVORS
-========================================== */
+/*==================================================
+    Dashboard Elements
+==================================================*/
+
+const totalFlavors = document.getElementById("totalFlavors");
+
+const availableFlavors = document.getElementById("availableFlavors");
+
+const featuredFlavors = document.getElementById("featuredFlavors");
+
+const categoryCount = document.getElementById("categoryCount");
+
+/*==================================================
+    Dashboard
+==================================================*/
+
+function updateDashboard() {
+
+    totalFlavors.textContent = flavors.length;
+
+    availableFlavors.textContent =
+
+        flavors.filter(flavor => flavor.available).length;
+
+    featuredFlavors.textContent =
+
+        flavors.filter(flavor => flavor.featured).length;
+
+    categoryCount.textContent = categories.length;
+
+}
+
+/*==================================================
+    Startup
+==================================================*/
+
+openPage("dashboard");
+
+updateDashboard();
+/*==================================================
+    J.Lato Admin
+==================================================*/
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+import {
+
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    doc
+
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+/*==================================================
+    Firebase
+==================================================*/
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBXS-qRlVntS76T56_vnbF9N3msp7djQ4g",
+
+    authDomain: "jlato-admin-576e1.firebaseapp.com",
+
+    projectId: "jlato-admin-576e1",
+
+    storageBucket: "jlato-admin-576e1.firebasestorage.app",
+
+    messagingSenderId: "989085177669",
+
+    appId: "1:989085177669:web:9f02b633f1e8b62e85d02c"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+/*==================================================
+    Password
+==================================================*/
+
+const ADMIN_PASSWORD = "jlato123";
+
+/*==================================================
+    Global Variables
+==================================================*/
+
+let flavors = [];
+
+let categories = [];
+
+let selectedFlavor = null;
+
+/*==================================================
+    Elements
+==================================================*/
+
+const loginScreen = document.getElementById("loginScreen");
+
+const appContainer = document.getElementById("app");
+
+const passwordInput = document.getElementById("password");
+
+const loginButton = document.getElementById("loginButton");
+
+const loginMessage = document.getElementById("loginMessage");
+
+const logoutButton = document.getElementById("logoutButton");
+
+/*==================================================
+    Login
+==================================================*/
+
+loginButton.addEventListener("click", login);
+
+passwordInput.addEventListener("keydown", (event) => {
+
+    if (event.key === "Enter") {
+
+        login();
+
+    }
+
+});
+
+function login() {
+
+    if (passwordInput.value.trim() === ADMIN_PASSWORD) {
+
+        loginScreen.classList.add("hidden");
+
+        appContainer.classList.remove("hidden");
+
+        loginMessage.textContent = "";
+
+        passwordInput.value = "";
+
+        console.log("Admin logged in.");
+
+    }
+
+    else {
+
+        loginMessage.textContent = "Incorrect password.";
+
+        passwordInput.select();
+
+    }
+
+}
+
+/*==================================================
+    Logout
+==================================================*/
+
+logoutButton.addEventListener("click", () => {
+
+    appContainer.classList.add("hidden");
+
+    loginScreen.classList.remove("hidden");
+
+});
+/*==================================================
+    Navigation
+==================================================*/
+
+const menuButtons = document.querySelectorAll(".menu-button");
+
+const pageTitle = document.getElementById("pageTitle");
+
+const pages = {
+
+    dashboard: document.getElementById("dashboardPage"),
+
+    flavors: document.getElementById("flavorsPage"),
+
+    categories: document.getElementById("categoriesPage"),
+
+    images: document.getElementById("imagesPage"),
+
+    settings: document.getElementById("settingsPage")
+
+};
+
+menuButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        openPage(button.dataset.page);
+
+    });
+
+});
+
+function openPage(page) {
+
+    document.querySelectorAll(".page").forEach(section => {
+
+        section.classList.remove("active-page");
+
+    });
+
+    menuButtons.forEach(button => {
+
+        button.classList.remove("active");
+
+    });
+
+    if (pages[page]) {
+
+        pages[page].classList.add("active-page");
+
+    }
+
+    document.querySelector(`[data-page="${page}"]`).classList.add("active");
+
+    pageTitle.textContent =
+
+        page.charAt(0).toUpperCase() + page.slice(1);
+
+}
+
+/*==================================================
+    Dashboard Elements
+==================================================*/
+
+const totalFlavors = document.getElementById("totalFlavors");
+
+const availableFlavors = document.getElementById("availableFlavors");
+
+const featuredFlavors = document.getElementById("featuredFlavors");
+
+const categoryCount = document.getElementById("categoryCount");
+
+/*==================================================
+    Dashboard
+==================================================*/
+
+function updateDashboard() {
+
+    totalFlavors.textContent = flavors.length;
+
+    availableFlavors.textContent =
+
+        flavors.filter(flavor => flavor.available).length;
+
+    featuredFlavors.textContent =
+
+        flavors.filter(flavor => flavor.featured).length;
+
+    categoryCount.textContent = categories.length;
+
+}
+
+/*==================================================
+    Startup
+==================================================*/
+
+openPage("dashboard");
+
+updateDashboard();
+/*==================================================
+    Flavor Rendering
+==================================================*/
+
+const flavorList = document.getElementById("flavorList");
+
 
 function renderFlavors(){
 
-    flavorContainer.innerHTML="";
+    if(!flavorList) return;
 
-    flavors.forEach((flavor)=>{
 
-        const card=document.createElement("div");
+    flavorList.innerHTML = "";
 
-        card.className="flavor-card";
 
-        card.dataset.id=flavor.id;
+    if(flavors.length === 0){
 
-        card.innerHTML=`
-
-<div class="image-section">
-
-<img
-src="${flavor.image || "placeholder.png"}"
-class="flavor-image"
-alt="${flavor.name}">
-
-</div>
-
-<div class="flavor-details">
-
-<div class="row">
-
-<div class="field">
-
-<label>Flavor Name</label>
-
-<input
-class="edit-name"
-type="text"
-value="${flavor.name}">
-
-</div>
-
-<div class="field small">
-
-<label>Price</label>
-
-<input
-class="edit-price"
-type="number"
-value="${flavor.price}">
-
-</div>
-
-</div>
-
-<div class="field">
-
-<label>Description</label>
-
-<textarea
-class="edit-description"
-rows="4">${flavor.description}</textarea>
-
-</div>
-
-<div class="row">
-
-<div class="field">
-
-<label>Category</label>
-
-<select class="edit-category">
-
-<option ${flavor.category==="Popular"?"selected":""}>Popular</option>
-
-<option ${flavor.category==="Must Try"?"selected":""}>Must Try</option>
-
-<option ${flavor.category==="Our Creation"?"selected":""}>Our Creation</option>
-
-<option ${flavor.category==="Classic"?"selected":""}>Classic</option>
-
-<option ${flavor.category==="Seasonal"?"selected":""}>Seasonal</option>
-
-</select>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="actions">
-
-<button class="save-card">
-
-💾 Save
-
-</button>
-
-<button class="delete-card">
-
-🗑 Delete
-
-</button>
-
-</div>
-
-`;
-
-        flavorContainer.appendChild(card);
-
-    });
-
-    updateStats();
-
-    attachCardEvents();
-
-}
-/* ==========================================
-   CARD EVENTS
-========================================== */
-
-function attachCardEvents(){
-
-    document.querySelectorAll(".save-card")
-    .forEach((button)=>{
-
-        button.onclick=saveCard;
-
-    });
-
-    document.querySelectorAll(".delete-card")
-    .forEach((button)=>{
-
-        button.onclick=deleteCard;
-
-    });
-
-}
-
-/* ==========================================
-   SAVE CARD
-========================================== */
-
-async function saveCard(e){
-
-    const card=e.target.closest(".flavor-card");
-
-    const id=card.dataset.id;
-
-    await updateDoc(
-
-        doc(db,"flavors",id),
-
-        {
-
-            name:card.querySelector(".edit-name").value,
-
-            price:Number(
-
-                card.querySelector(".edit-price").value
-
-            ),
-
-            description:
-
-                card.querySelector(".edit-description").value,
-
-            category:
-
-                card.querySelector(".edit-category").value,
-
-            updatedAt:Date.now()
-
-        }
-
-    );
-
-    showToast("Flavor Updated");
-
-    loadFlavors();
-
-}
-
-/* ==========================================
-   DELETE CARD
-========================================== */
-
-async function deleteCard(e){
-
-    if(!confirm("Delete this flavor?")){
+        flavorList.innerHTML = `
+            <p class="empty">
+                No flavors added yet.
+            </p>
+        `;
 
         return;
 
     }
 
-    const card=e.target.closest(".flavor-card");
 
-    const id=card.dataset.id;
+    flavors.forEach(flavor => {
+
+
+        const card = document.createElement("div");
+
+        card.className = "flavor-card";
+
+
+        card.innerHTML = `
+
+            <img src="${flavor.image || 'logo.png'}">
+
+
+            <div class="flavor-info">
+
+                <h3>${flavor.name || "Unnamed Flavor"}</h3>
+
+                <p>
+                    Category:
+                    ${flavor.category || "None"}
+                </p>
+
+                <p>
+                    ${flavor.description || ""}
+                </p>
+
+            </div>
+
+
+            <div class="flavor-actions">
+
+                <button onclick="editFlavor('${flavor.id}')">
+
+                    Edit
+
+                </button>
+
+
+                <button onclick="removeFlavor('${flavor.id}')">
+
+                    Delete
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        flavorList.appendChild(card);
+
+
+    });
+
+
+}
+
+
+/*==================================================
+    Add Flavor
+==================================================*/
+
+const addFlavorButton =
+document.getElementById("addFlavorButton");
+
+
+if(addFlavorButton){
+
+    addFlavorButton.addEventListener("click", async()=>{
+
+
+        const newFlavor = {
+
+
+            name:"New Flavor",
+
+            category:"Gelato",
+
+            description:"",
+
+            image:"",
+
+            available:true,
+
+            featured:false
+
+
+        };
+
+
+        await addDoc(
+
+            flavorsCollection,
+
+            newFlavor
+
+        );
+
+
+        await loadFlavors();
+
+
+    });
+
+}
+
+
+/*==================================================
+    Delete Flavor
+==================================================*/
+
+window.removeFlavor = async function(id){
+
+
+    const confirmDelete =
+    confirm("Delete this flavor?");
+
+
+    if(!confirmDelete) return;
+
 
     await deleteDoc(
 
@@ -362,252 +605,195 @@ async function deleteCard(e){
 
     );
 
-    showToast("Flavor Deleted");
 
-    loadFlavors();
+    await loadFlavors();
 
-}
 
-/* ==========================================
-   UPDATE STATS
-========================================== */
+};
+/*==================================================
+    Edit Flavor
+==================================================*/
 
-function updateStats(){
+const editName = document.getElementById("editName");
 
-    document.getElementById("flavorCount")
-        .innerText=flavors.length;
+const editCategory = document.getElementById("editCategory");
 
-    document.getElementById("categoryCount")
-        .innerText=
-        new Set(
-            flavors.map(f=>f.category)
-        ).size;
+const editDescription = document.getElementById("editDescription");
 
-    document.getElementById("featuredCount")
-        .innerText=
-        flavors.filter(f=>f.featured).length;
+const editImage = document.getElementById("editImage");
 
-    document.getElementById("availableCount")
-        .innerText=
-        flavors.filter(f=>f.available!==false).length;
+const saveFlavorButton =
+document.getElementById("saveFlavorButton");
 
-}
-/* ==========================================
-   ADD FLAVOR MODAL
-========================================== */
 
-addFlavorButton.addEventListener("click",()=>{
 
-    addFlavorModal.classList.remove("hidden");
+window.editFlavor = function(id){
 
-});
 
-document.querySelectorAll(".close-modal").forEach((button)=>{
+    selectedFlavor = flavors.find(
 
-    button.onclick=()=>{
-
-        addFlavorModal.classList.add("hidden");
-
-        deleteModal.classList.add("hidden");
-
-    };
-
-});
-
-document.querySelectorAll(".cancel-button").forEach((button)=>{
-
-    button.onclick=()=>{
-
-        addFlavorModal.classList.add("hidden");
-
-        deleteModal.classList.add("hidden");
-
-    };
-
-});
-
-/* ==========================================
-   ADD NEW FLAVOR
-========================================== */
-
-document.querySelector(".save-button")
-.addEventListener("click",addFlavor);
-
-async function addFlavor(){
-
-    const name=newFlavorName.value.trim();
-
-    const price=Number(newFlavorPrice.value);
-
-    const description=
-    newFlavorDescription.value.trim();
-
-    const category=
-    newFlavorCategory.value;
-
-    if(name===""){
-
-        alert("Please enter a flavor name.");
-
-        return;
-
-    }
-
-    await addDoc(
-
-        flavorsCollection,
-
-        {
-
-            name,
-
-            price,
-
-            description,
-
-            category,
-
-            image:"placeholder.png",
-
-            featured:false,
-
-            available:true,
-
-            createdAt:Date.now(),
-
-            updatedAt:Date.now()
-
-        }
+        flavor => flavor.id === id
 
     );
 
-    newFlavorName.value="";
-    newFlavorPrice.value="";
-    newFlavorDescription.value="";
-    newFlavorCategory.selectedIndex=0;
 
-    addFlavorModal.classList.add("hidden");
+    if(!selectedFlavor) return;
 
-    showToast("Flavor Added");
 
-    loadFlavors();
+    editName.value =
+    selectedFlavor.name || "";
 
-}
 
-/* ==========================================
-   GLOBAL SAVE BUTTON
-========================================== */
+    editCategory.value =
+    selectedFlavor.category || "";
 
-saveButton.onclick=()=>{
 
-    showToast("Everything is already saved.");
+    editDescription.value =
+    selectedFlavor.description || "";
 
-};
 
-floatingSave.onclick=()=>{
+    editImage.value =
+    selectedFlavor.image || "";
 
-    showToast("Everything is already saved.");
+
+    openPage("flavors");
+
 
 };
-/* ==========================================
-   SEARCH
-========================================== */
 
-const searchInput = document.getElementById("searchInput");
 
-searchInput.addEventListener("input", () => {
 
-    const text = searchInput.value.toLowerCase();
+/*==================================================
+    Save Flavor Changes
+==================================================*/
 
-    document.querySelectorAll(".flavor-card").forEach((card) => {
+if(saveFlavorButton){
 
-        const name = card.querySelector(".edit-name")
-            .value
-            .toLowerCase();
 
-        card.style.display =
-            name.includes(text) ? "" : "none";
+    saveFlavorButton.addEventListener(
+    "click",
+    async()=>{
+
+
+        if(!selectedFlavor){
+
+            alert("Select a flavor first.");
+
+            return;
+
+        }
+
+
+
+        const flavorRef =
+        doc(
+            db,
+            "flavors",
+            selectedFlavor.id
+        );
+
+
+
+        await updateDoc(
+
+            flavorRef,
+
+            {
+
+                name:
+                editName.value,
+
+
+                category:
+                editCategory.value,
+
+
+                description:
+                editDescription.value,
+
+
+                image:
+                editImage.value
+
+            }
+
+        );
+
+
+
+        alert("Flavor saved!");
+
+
+
+        selectedFlavor = null;
+
+
+        await loadFlavors();
+
 
     });
 
-});
-
-/* ==========================================
-   FEATURED
-========================================== */
-
-async function toggleFeatured(id, value) {
-
-    await updateDoc(
-
-        doc(db, "flavors", id),
-
-        {
-
-            featured: value,
-
-            updatedAt: Date.now()
-
-        }
-
-    );
 
 }
 
-/* ==========================================
-   AVAILABLE
-========================================== */
 
-async function toggleAvailable(id, value) {
 
-    await updateDoc(
+/*==================================================
+    Category Loading
+==================================================*/
 
-        doc(db, "flavors", id),
+const categorySelect =
+document.getElementById("editCategory");
 
-        {
 
-            available: value,
+function renderCategories(){
 
-            updatedAt: Date.now()
 
-        }
+    if(!categorySelect) return;
 
-    );
 
-}
+    categorySelect.innerHTML = "";
 
-/* ==========================================
-   LIVE REFRESH
-========================================== */
 
-setInterval(loadFlavors,30000);
+    categories.forEach(category=>{
 
-/* ==========================================
-   IMAGE URL
-========================================== */
 
-async function updateImage(id,url){
+        const option =
+        document.createElement("option");
 
-    await updateDoc(
 
-        doc(db,"flavors",id),
+        option.value =
+        category.name;
 
-        {
 
-            image:url,
+        option.textContent =
+        category.name;
 
-            updatedAt:Date.now()
 
-        }
+        categorySelect.appendChild(option);
 
-    );
+
+    });
+
 
 }
 
-/* ==========================================
-   STARTUP
-========================================== */
 
-console.log("J.Lato Admin Ready");
 
-showToast("Connected to Firebase");
+/*==================================================
+    Update category list after loading
+==================================================*/
+
+const oldLoadCategories = loadCategories;
+
+
+loadCategories = async function(){
+
+
+    await oldLoadCategories();
+
+
+    renderCategories();
+
+
+};
