@@ -2,7 +2,7 @@
     J.Lato Admin
 ==================================================*/
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 
 import {
 
@@ -14,7 +14,7 @@ import {
     deleteDoc,
     doc
 
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 /*==================================================
     Firebase
@@ -47,7 +47,15 @@ const db = getFirestore(app);
 const ADMIN_PASSWORD = "jlato123";
 
 /*==================================================
-    Global Variables
+    Collections
+==================================================*/
+
+const flavorsCollection = collection(db, "flavors");
+
+const categoriesCollection = collection(db, "categories");
+
+/*==================================================
+    Global Data
 ==================================================*/
 
 let flavors = [];
@@ -57,7 +65,7 @@ let categories = [];
 let selectedFlavor = null;
 
 /*==================================================
-    Elements
+    Login Elements
 ==================================================*/
 
 const loginScreen = document.getElementById("loginScreen");
@@ -73,119 +81,6 @@ const loginMessage = document.getElementById("loginMessage");
 const logoutButton = document.getElementById("logoutButton");
 
 /*==================================================
-    Login
-==================================================*/
-
-loginButton.addEventListener("click", login);
-
-passwordInput.addEventListener("keydown", (event) => {
-
-    if (event.key === "Enter") {
-
-        login();
-
-    }
-
-});
-
-function login() {
-
-    if (passwordInput.value.trim() === ADMIN_PASSWORD) {
-
-        loginScreen.classList.add("hidden");
-
-        appContainer.classList.remove("hidden");
-
-        loginMessage.textContent = "";
-
-        passwordInput.value = "";
-
-        console.log("Admin logged in.");
-
-    }
-
-    else {
-
-        loginMessage.textContent = "Incorrect password.";
-
-        passwordInput.select();
-
-    }
-
-}
-
-/*==================================================
-    Logout
-==================================================*/
-
-logoutButton.addEventListener("click", () => {
-
-    appContainer.classList.add("hidden");
-
-    loginScreen.classList.remove("hidden");
-
-});
-/*==================================================
-    Navigation
-==================================================*/
-
-const menuButtons = document.querySelectorAll(".menu-button");
-
-const pageTitle = document.getElementById("pageTitle");
-
-const pages = {
-
-    dashboard: document.getElementById("dashboardPage"),
-
-    flavors: document.getElementById("flavorsPage"),
-
-    categories: document.getElementById("categoriesPage"),
-
-    images: document.getElementById("imagesPage"),
-
-    settings: document.getElementById("settingsPage")
-
-};
-
-menuButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        openPage(button.dataset.page);
-
-    });
-
-});
-
-function openPage(page) {
-
-    document.querySelectorAll(".page").forEach(section => {
-
-        section.classList.remove("active-page");
-
-    });
-
-    menuButtons.forEach(button => {
-
-        button.classList.remove("active");
-
-    });
-
-    if (pages[page]) {
-
-        pages[page].classList.add("active-page");
-
-    }
-
-    document.querySelector(`[data-page="${page}"]`).classList.add("active");
-
-    pageTitle.textContent =
-
-        page.charAt(0).toUpperCase() + page.slice(1);
-
-}
-
-/*==================================================
     Dashboard Elements
 ==================================================*/
 
@@ -197,142 +92,33 @@ const featuredFlavors = document.getElementById("featuredFlavors");
 
 const categoryCount = document.getElementById("categoryCount");
 
-/*==================================================
-    Dashboard
-==================================================*/
-
-function updateDashboard() {
-
-    totalFlavors.textContent = flavors.length;
-
-    availableFlavors.textContent =
-
-        flavors.filter(flavor => flavor.available).length;
-
-    featuredFlavors.textContent =
-
-        flavors.filter(flavor => flavor.featured).length;
-
-    categoryCount.textContent = categories.length;
-
-}
-
-/*==================================================
-    Startup
-==================================================*/
-
-openPage("dashboard");
-
-updateDashboard();
-/*==================================================
-    J.Lato Admin
-==================================================*/
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-
-import {
-
-    getFirestore,
-    collection,
-    getDocs,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    doc
-
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-/*==================================================
-    Firebase
-==================================================*/
-
-const firebaseConfig = {
-
-    apiKey: "AIzaSyBXS-qRlVntS76T56_vnbF9N3msp7djQ4g",
-
-    authDomain: "jlato-admin-576e1.firebaseapp.com",
-
-    projectId: "jlato-admin-576e1",
-
-    storageBucket: "jlato-admin-576e1.firebasestorage.app",
-
-    messagingSenderId: "989085177669",
-
-    appId: "1:989085177669:web:9f02b633f1e8b62e85d02c"
-
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-/*==================================================
-    Password
-==================================================*/
-
-const ADMIN_PASSWORD = "jlato123";
-
-/*==================================================
-    Global Variables
-==================================================*/
-
-let flavors = [];
-
-let categories = [];
-
-let selectedFlavor = null;
-
-/*==================================================
-    Elements
-==================================================*/
-
-const loginScreen = document.getElementById("loginScreen");
-
-const appContainer = document.getElementById("app");
-
-const passwordInput = document.getElementById("password");
-
-const loginButton = document.getElementById("loginButton");
-
-const loginMessage = document.getElementById("loginMessage");
-
-const logoutButton = document.getElementById("logoutButton");
+const pageTitle = document.getElementById("pageTitle");
 
 /*==================================================
     Login
 ==================================================*/
 
-loginButton.addEventListener("click", login);
+function login(){
 
-passwordInput.addEventListener("keydown", (event) => {
-
-    if (event.key === "Enter") {
-
-        login();
-
-    }
-
-});
-
-function login() {
-
-    if (passwordInput.value.trim() === ADMIN_PASSWORD) {
+    if(passwordInput.value.trim()===ADMIN_PASSWORD){
 
         loginScreen.classList.add("hidden");
 
         appContainer.classList.remove("hidden");
 
-        loginMessage.textContent = "";
+        loginMessage.textContent="";
 
-        passwordInput.value = "";
+        passwordInput.value="";
 
-        console.log("Admin logged in.");
+        loadEverything();
 
     }
 
-    else {
+    else{
 
-        loginMessage.textContent = "Incorrect password.";
+        loginMessage.textContent="Wrong password.";
+
+        passwordInput.focus();
 
         passwordInput.select();
 
@@ -340,460 +126,746 @@ function login() {
 
 }
 
+loginButton.addEventListener("click",login);
+
+passwordInput.addEventListener("keydown",(event)=>{
+
+    if(event.key==="Enter"){
+
+        login();
+
+    }
+
+});
+
 /*==================================================
     Logout
 ==================================================*/
 
-logoutButton.addEventListener("click", () => {
+logoutButton.addEventListener("click",()=>{
 
     appContainer.classList.add("hidden");
 
     loginScreen.classList.remove("hidden");
 
 });
+
 /*==================================================
     Navigation
 ==================================================*/
 
-const menuButtons = document.querySelectorAll(".menu-button");
+const pages=document.querySelectorAll(".page");
 
-const pageTitle = document.getElementById("pageTitle");
+const menuButtons=document.querySelectorAll(".menu-button");
 
-const pages = {
+menuButtons.forEach(button=>{
 
-    dashboard: document.getElementById("dashboardPage"),
+    button.addEventListener("click",()=>{
 
-    flavors: document.getElementById("flavorsPage"),
+        const page=button.dataset.page;
 
-    categories: document.getElementById("categoriesPage"),
-
-    images: document.getElementById("imagesPage"),
-
-    settings: document.getElementById("settingsPage")
-
-};
-
-menuButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        openPage(button.dataset.page);
+        showPage(page);
 
     });
 
 });
 
-function openPage(page) {
+function showPage(page){
 
-    document.querySelectorAll(".page").forEach(section => {
+    pages.forEach(section=>{
 
         section.classList.remove("active-page");
 
     });
 
-    menuButtons.forEach(button => {
+    menuButtons.forEach(button=>{
 
         button.classList.remove("active");
 
     });
 
-    if (pages[page]) {
+    document.getElementById(page+"Page").classList.add("active-page");
 
-        pages[page].classList.add("active-page");
+    document
+        .querySelector(`[data-page="${page}"]`)
+        .classList.add("active");
 
-    }
+    pageTitle.textContent=
 
-    document.querySelector(`[data-page="${page}"]`).classList.add("active");
+        page.charAt(0).toUpperCase()+
 
-    pageTitle.textContent =
-
-        page.charAt(0).toUpperCase() + page.slice(1);
+        page.slice(1);
 
 }
-
-/*==================================================
-    Dashboard Elements
-==================================================*/
-
-const totalFlavors = document.getElementById("totalFlavors");
-
-const availableFlavors = document.getElementById("availableFlavors");
-
-const featuredFlavors = document.getElementById("featuredFlavors");
-
-const categoryCount = document.getElementById("categoryCount");
 
 /*==================================================
     Dashboard
 ==================================================*/
 
-function updateDashboard() {
+function updateDashboard(){
 
-    totalFlavors.textContent = flavors.length;
+    totalFlavors.textContent=flavors.length;
 
-    availableFlavors.textContent =
+    availableFlavors.textContent=
 
-        flavors.filter(flavor => flavor.available).length;
+        flavors.filter(f=>f.available).length;
 
-    featuredFlavors.textContent =
+    featuredFlavors.textContent=
 
-        flavors.filter(flavor => flavor.featured).length;
+        flavors.filter(f=>f.featured).length;
 
-    categoryCount.textContent = categories.length;
+    categoryCount.textContent=
+
+        categories.length;
 
 }
 
 /*==================================================
-    Startup
+    Firestore Loading
 ==================================================*/
 
-openPage("dashboard");
+async function loadEverything(){
 
-updateDashboard();
+    await loadCategories();
+
+    await loadFlavors();
+
+}
+
+async function loadCategories(){
+
+    categories=[];
+
+    const snapshot=await getDocs(categoriesCollection);
+
+    snapshot.forEach(document=>{
+
+        categories.push({
+
+            id:document.id,
+
+            ...document.data()
+
+        });
+
+    });
+
+    updateDashboard();
+
+}
+
+async function loadFlavors(){
+
+    flavors=[];
+
+    const snapshot=await getDocs(flavorsCollection);
+
+    snapshot.forEach(document=>{
+
+        flavors.push({
+
+            id:document.id,
+
+            ...document.data()
+
+        });
+
+    });
+
+    updateDashboard();
+
+}
 /*==================================================
-    Flavor Rendering
+    DOM ELEMENTS
 ==================================================*/
 
 const flavorList = document.getElementById("flavorList");
 
+const searchFlavor = document.getElementById("searchFlavor");
 
-function renderFlavors(){
+const addFlavorButton = document.getElementById("addFlavorButton");
 
-    if(!flavorList) return;
+const flavorModal = document.getElementById("flavorModal");
 
+const closeFlavorModal =
+document.getElementById("closeFlavorModal");
+
+const modalTitle =
+document.getElementById("modalTitle");
+
+const flavorName =
+document.getElementById("flavorName");
+
+const flavorPrice =
+document.getElementById("flavorPrice");
+
+const flavorDescription =
+document.getElementById("flavorDescription");
+
+const flavorCategory =
+document.getElementById("flavorCategory");
+
+const imageURL =
+document.getElementById("imageURL");
+
+const imageUpload =
+document.getElementById("imageUpload");
+
+const previewImage =
+document.getElementById("previewImage");
+
+const featuredSwitch =
+document.getElementById("featuredSwitch");
+
+const availableSwitch =
+document.getElementById("availableSwitch");
+
+/*==================================================
+    MODAL
+==================================================*/
+
+function openFlavorModal(){
+
+    flavorModal.classList.remove("hidden");
+
+}
+
+function closeFlavor(){
+
+    flavorModal.classList.add("hidden");
+
+    currentFlavor = null;
+
+}
+
+closeFlavorModal.addEventListener(
+
+    "click",
+
+    closeFlavor
+
+);
+
+/*==================================================
+    IMAGE PREVIEW
+==================================================*/
+
+imageURL.addEventListener("input",()=>{
+
+    if(imageURL.value.trim()===""){
+
+        previewImage.src="placeholder.png";
+
+        return;
+
+    }
+
+    previewImage.src=imageURL.value;
+
+});
+
+imageUpload.addEventListener("change",()=>{
+
+    const file=imageUpload.files[0];
+
+    if(!file) return;
+
+    previewImage.src=
+
+        URL.createObjectURL(file);
+
+});
+
+/*==================================================
+    NEW FLAVOR
+==================================================*/
+
+addFlavorButton.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        currentFlavor=null;
+
+        modalTitle.textContent="New Flavor";
+
+        flavorName.value="";
+
+        flavorPrice.value="";
+
+        flavorDescription.value="";
+
+        imageURL.value="";
+
+        previewImage.src="placeholder.png";
+
+        featuredSwitch.checked=false;
+
+        availableSwitch.checked=true;
+
+        openFlavorModal();
+
+    }
+
+);
+/*==================================================
+    RENDER FLAVORS
+==================================================*/
+
+function renderFlavors(list = flavors){
 
     flavorList.innerHTML = "";
 
-
-    if(flavors.length === 0){
+    if(list.length === 0){
 
         flavorList.innerHTML = `
-            <p class="empty">
-                No flavors added yet.
-            </p>
+            <div class="empty-state">
+                No flavors found.
+            </div>
         `;
 
         return;
 
     }
 
-
-    flavors.forEach(flavor => {
-
+    list.forEach(flavor=>{
 
         const card = document.createElement("div");
 
         card.className = "flavor-card";
 
-
         card.innerHTML = `
 
-            <img src="${flavor.image || 'logo.png'}">
+            <img
+                src="${flavor.image || "placeholder.png"}"
+                class="flavor-image">
 
+            <div class="flavor-content">
 
-            <div class="flavor-info">
+                <h3>${flavor.name}</h3>
 
-                <h3>${flavor.name || "Unnamed Flavor"}</h3>
+                <p>${flavor.description || ""}</p>
 
-                <p>
-                    Category:
-                    ${flavor.category || "None"}
-                </p>
-
-                <p>
-                    ${flavor.description || ""}
-                </p>
-
-            </div>
-
-
-            <div class="flavor-actions">
-
-                <button onclick="editFlavor('${flavor.id}')">
-
-                    Edit
-
-                </button>
-
-
-                <button onclick="removeFlavor('${flavor.id}')">
-
-                    Delete
-
-                </button>
+                <span>${flavor.category || ""}</span>
 
             </div>
 
         `;
 
+        card.addEventListener("click",()=>{
+
+            editFlavor(flavor);
+
+        });
 
         flavorList.appendChild(card);
 
-
-    });
-
-
-}
-
-
-/*==================================================
-    Add Flavor
-==================================================*/
-
-const addFlavorButton =
-document.getElementById("addFlavorButton");
-
-
-if(addFlavorButton){
-
-    addFlavorButton.addEventListener("click", async()=>{
-
-
-        const newFlavor = {
-
-
-            name:"New Flavor",
-
-            category:"Gelato",
-
-            description:"",
-
-            image:"",
-
-            available:true,
-
-            featured:false
-
-
-        };
-
-
-        await addDoc(
-
-            flavorsCollection,
-
-            newFlavor
-
-        );
-
-
-        await loadFlavors();
-
-
     });
 
 }
 
-
 /*==================================================
-    Delete Flavor
+    EDIT FLAVOR
 ==================================================*/
 
-window.removeFlavor = async function(id){
+function editFlavor(flavor){
 
+    currentFlavor = flavor;
 
-    const confirmDelete =
-    confirm("Delete this flavor?");
+    modalTitle.textContent = "Edit Flavor";
 
+    flavorName.value = flavor.name || "";
 
-    if(!confirmDelete) return;
+    flavorPrice.value = flavor.price || "";
 
+    flavorDescription.value =
+        flavor.description || "";
 
-    await deleteDoc(
+    imageURL.value =
+        flavor.image || "";
 
-        doc(db,"flavors",id)
+    previewImage.src =
+        flavor.image || "placeholder.png";
 
-    );
+    featuredSwitch.checked =
+        flavor.featured || false;
 
+    availableSwitch.checked =
+        flavor.available ?? true;
 
-    await loadFlavors();
+    flavorCategory.value =
+        flavor.category || "";
 
+    openFlavorModal();
 
-};
-/*==================================================
-    Edit Flavor
-==================================================*/
-
-const editName = document.getElementById("editName");
-
-const editCategory = document.getElementById("editCategory");
-
-const editDescription = document.getElementById("editDescription");
-
-const editImage = document.getElementById("editImage");
-
-const saveFlavorButton =
-document.getElementById("saveFlavorButton");
-
-
-
-window.editFlavor = function(id){
-
-
-    selectedFlavor = flavors.find(
-
-        flavor => flavor.id === id
-
-    );
-
-
-    if(!selectedFlavor) return;
-
-
-    editName.value =
-    selectedFlavor.name || "";
-
-
-    editCategory.value =
-    selectedFlavor.category || "";
-
-
-    editDescription.value =
-    selectedFlavor.description || "";
-
-
-    editImage.value =
-    selectedFlavor.image || "";
-
-
-    openPage("flavors");
-
-
-};
-
-
+}
 
 /*==================================================
-    Save Flavor Changes
+    SEARCH
 ==================================================*/
 
-if(saveFlavorButton){
+searchFlavor.addEventListener("input",()=>{
 
+    const value =
+        searchFlavor.value
+        .toLowerCase()
+        .trim();
 
-    saveFlavorButton.addEventListener(
-    "click",
-    async()=>{
+    const filtered = flavors.filter(flavor=>{
 
+        return (
 
-        if(!selectedFlavor){
+            (flavor.name || "")
+            .toLowerCase()
+            .includes(value)
 
-            alert("Select a flavor first.");
+            ||
 
-            return;
+            (flavor.category || "")
+            .toLowerCase()
+            .includes(value)
 
-        }
-
-
-
-        const flavorRef =
-        doc(
-            db,
-            "flavors",
-            selectedFlavor.id
         );
 
+    });
 
+    renderFlavors(filtered);
+
+});
+t/*==================================================
+    SAVE FLAVOR
+==================================================*/
+
+const saveFlavor =
+document.getElementById("saveFlavor");
+
+saveFlavor.addEventListener("click",async()=>{
+
+    const data={
+
+        name:flavorName.value.trim(),
+
+        price:Number(flavorPrice.value)||0,
+
+        description:flavorDescription.value.trim(),
+
+        category:flavorCategory.value,
+
+        image:imageURL.value.trim(),
+
+        featured:featuredSwitch.checked,
+
+        available:availableSwitch.checked
+
+    };
+
+    if(data.name===""){
+
+        alert("Please enter a flavor name.");
+
+        return;
+
+    }
+
+    if(currentFlavor){
 
         await updateDoc(
 
-            flavorRef,
+            doc(db,"flavors",currentFlavor.id),
 
-            {
-
-                name:
-                editName.value,
-
-
-                category:
-                editCategory.value,
-
-
-                description:
-                editDescription.value,
-
-
-                image:
-                editImage.value
-
-            }
+            data
 
         );
 
+    }else{
 
+        await addDoc(
 
-        alert("Flavor saved!");
+            flavorsRef,
 
+            data
 
+        );
 
-        selectedFlavor = null;
+    }
 
+    closeFlavor();
+
+    await loadFlavors();
+
+    renderFlavors();
+
+    updateDashboard();
+
+});
+
+/*==================================================
+    DELETE FLAVOR
+==================================================*/
+
+const deleteFlavorButton =
+document.getElementById("deleteFlavor");
+
+deleteFlavorButton.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        if(!currentFlavor) return;
+
+        document
+        .getElementById("confirmModal")
+        .classList
+        .remove("hidden");
+
+    }
+
+);
+
+document
+.getElementById("cancelDelete")
+.addEventListener("click",()=>{
+
+    document
+    .getElementById("confirmModal")
+    .classList
+    .add("hidden");
+
+});
+
+document
+.getElementById("confirmDelete")
+.addEventListener("click",async()=>{
+
+    if(!currentFlavor) return;
+
+    await deleteDoc(
+
+        doc(db,"flavors",currentFlavor.id)
+
+    );
+
+    document
+    .getElementById("confirmModal")
+    .classList
+    .add("hidden");
+
+    closeFlavor();
+
+    await loadFlavors();
+
+    renderFlavors();
+
+    updateDashboard();
+
+});
+
+/*==================================================
+    DUPLICATE FLAVOR
+==================================================*/
+
+const duplicateFlavorButton =
+document.getElementById("duplicateFlavor");
+
+duplicateFlavorButton.addEventListener(
+
+    "click",
+
+    async()=>{
+
+        if(!currentFlavor) return;
+
+        const copy={
+
+            ...currentFlavor,
+
+            name:currentFlavor.name+" Copy"
+
+        };
+
+        delete copy.id;
+
+        await addDoc(
+
+            flavorsRef,
+
+            copy
+
+        );
 
         await loadFlavors();
 
+        renderFlavors();
 
-    });
+        updateDashboard();
 
+    }
 
-}
-
-
-
+);
 /*==================================================
-    Category Loading
+    CATEGORIES
 ==================================================*/
-
-const categorySelect =
-document.getElementById("editCategory");
-
 
 function renderCategories(){
 
-
-    if(!categorySelect) return;
-
-
-    categorySelect.innerHTML = "";
-
+    flavorCategory.innerHTML="";
 
     categories.forEach(category=>{
 
+        const option=document.createElement("option");
 
-        const option =
-        document.createElement("option");
+        option.value=category.name;
 
+        option.textContent=category.name;
 
-        option.value =
-        category.name;
-
-
-        option.textContent =
-        category.name;
-
-
-        categorySelect.appendChild(option);
-
+        flavorCategory.appendChild(option);
 
     });
 
-
 }
 
+document
+.getElementById("addCategoryButton")
+.addEventListener("click",async()=>{
 
+    const name=prompt("Category name");
 
-/*==================================================
-    Update category list after loading
-==================================================*/
+    if(!name) return;
 
-const oldLoadCategories = loadCategories;
+    await addDoc(
 
+        categoriesRef,
 
-loadCategories = async function(){
+        {
 
+            name:name.trim()
 
-    await oldLoadCategories();
+        }
 
+    );
+
+    await loadCategories();
 
     renderCategories();
 
+    updateDashboard();
+
+});
+
+/*==================================================
+    QUICK BUTTONS
+==================================================*/
+
+document
+.getElementById("quickAddFlavor")
+.onclick=()=>{
+
+    openPage("flavors");
+
+    addFlavorButton.click();
 
 };
+
+document
+.getElementById("quickManageCategories")
+.onclick=()=>{
+
+    openPage("categories");
+
+};
+
+document
+.getElementById("quickImages")
+.onclick=()=>{
+
+    openPage("images");
+
+};
+
+document
+.getElementById("quickSettings")
+.onclick=()=>{
+
+    openPage("settings");
+
+};
+
+/*==================================================
+    SETTINGS
+==================================================*/
+
+document
+.getElementById("saveSettings")
+.addEventListener("click",()=>{
+
+    showToast("Settings saved");
+
+});
+
+/*==================================================
+    TOAST
+==================================================*/
+
+const toast=document.getElementById("toast");
+
+function showToast(message){
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+/*==================================================
+    LOADING
+==================================================*/
+
+const loading=document.getElementById("loadingOverlay");
+
+function showLoading(){
+
+    loading.classList.remove("hidden");
+
+}
+
+function hideLoading(){
+
+    loading.classList.add("hidden");
+
+}
+
+/*==================================================
+    INITIALIZE CMS
+==================================================*/
+
+async function initializeCMS(){
+
+    showLoading();
+
+    await loadCategories();
+
+    await loadFlavors();
+
+    renderCategories();
+
+    renderFlavors();
+
+    updateDashboard();
+
+    hideLoading();
+
+}
+
+/*==================================================
+    PAGE DEFAULT
+==================================================*/
+
+openPage("dashboard");
