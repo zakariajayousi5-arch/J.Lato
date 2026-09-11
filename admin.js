@@ -39,6 +39,9 @@ const statFlavors = document.getElementById("statFlavors");
 const statCategories = document.getElementById("statCategories");
 const statImages = document.getElementById("statImages");
 
+/* Image Upload Element */
+const uploadImageButton = document.getElementById("uploadImageButton");
+
 /*==================================================
     NAVIGATION SYSTEM
 ==================================================*/
@@ -206,6 +209,42 @@ if (addCategoryButton) {
 
         categoryNameInput.value = "";
         await loadData();
+    });
+}
+
+/*==================================================
+    IMAGE UPLOAD HANDLER
+==================================================*/
+if (uploadImageButton) {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+
+    uploadImageButton.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", async () => {
+        if (!fileInput.files[0]) return;
+
+        const formData = new FormData();
+        formData.append("image", fileInput.files[0]);
+
+        try {
+            const res = await fetch(`${API_URL}?action=upload_image`, {
+                method: "POST",
+                body: formData
+            });
+            const result = await res.json();
+
+            if (result.status === "success") {
+                alert("Image uploaded successfully!");
+                const flavorImageInput = document.getElementById("flavorImage");
+                if (flavorImageInput) flavorImageInput.value = result.url;
+            } else {
+                alert(result.message || "Upload failed");
+            }
+        } catch (err) {
+            console.error("Upload error:", err);
+        }
     });
 }
 
