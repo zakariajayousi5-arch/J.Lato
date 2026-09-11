@@ -1,871 +1,374 @@
-/*==================================================
-    J.Lato Admin
-==================================================*/
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-
-import {
-
-    getFirestore,
-    collection,
-    getDocs,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    doc
-
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-
-/*==================================================
-    Firebase
-==================================================*/
-
-const firebaseConfig = {
-
-    apiKey: "AIzaSyBXS-qRlVntS76T56_vnbF9N3msp7djQ4g",
-
-    authDomain: "jlato-admin-576e1.firebaseapp.com",
-
-    projectId: "jlato-admin-576e1",
-
-    storageBucket: "jlato-admin-576e1.firebasestorage.app",
-
-    messagingSenderId: "989085177669",
-
-    appId: "1:989085177669:web:9f02b633f1e8b62e85d02c"
-
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-/*==================================================
-    Password
-==================================================*/
-
-const ADMIN_PASSWORD = "jlato123";
-
-/*==================================================
-    Collections
-==================================================*/
-
-const flavorsCollection = collection(db, "flavors");
-
-const categoriesCollection = collection(db, "categories");
-
-/*==================================================
-    Global Data
-==================================================*/
-
+/* Global State */
 let flavors = [];
-
 let categories = [];
-
-let selectedFlavor = null;
-
-/*==================================================
-    Login Elements
-==================================================*/
-
-const loginScreen = document.getElementById("loginScreen");
-
-const appContainer = document.getElementById("app");
-
-const passwordInput = document.getElementById("password");
-
-const loginButton = document.getElementById("loginButton");
-
-const loginMessage = document.getElementById("loginMessage");
-
-const logoutButton = document.getElementById("logoutButton");
-
-/*==================================================
-    Dashboard Elements
-==================================================*/
-
-const totalFlavors = document.getElementById("totalFlavors");
-
-const availableFlavors = document.getElementById("availableFlavors");
-
-const featuredFlavors = document.getElementById("featuredFlavors");
-
-const categoryCount = document.getElementById("categoryCount");
-
-const pageTitle = document.getElementById("pageTitle");
-
-/*==================================================
-    Login
-==================================================*/
-
-function login(){
-
-    if(passwordInput.value.trim()===ADMIN_PASSWORD){
-
-        loginScreen.classList.add("hidden");
-
-        appContainer.classList.remove("hidden");
-
-        loginMessage.textContent="";
-
-        passwordInput.value="";
-
-        loadEverything();
-
-    }
-
-    else{
-
-        loginMessage.textContent="Wrong password.";
-
-        passwordInput.focus();
-
-        passwordInput.select();
-
-    }
-
-}
-
-loginButton.addEventListener("click",login);
-
-passwordInput.addEventListener("keydown",(event)=>{
-
-    if(event.key==="Enter"){
-
-        login();
-
-    }
-
-});
-
-/*==================================================
-    Logout
-==================================================*/
-
-logoutButton.addEventListener("click",()=>{
-
-    appContainer.classList.add("hidden");
-
-    loginScreen.classList.remove("hidden");
-
-});
-
-/*==================================================
-    Navigation
-==================================================*/
-
-const pages=document.querySelectorAll(".page");
-
-const menuButtons=document.querySelectorAll(".menu-button");
-
-menuButtons.forEach(button=>{
-
-    button.addEventListener("click",()=>{
-
-        const page=button.dataset.page;
-
-        showPage(page);
-
-    });
-
-});
-
-function showPage(page){
-
-    pages.forEach(section=>{
-
-        section.classList.remove("active-page");
-
-    });
-
-    menuButtons.forEach(button=>{
-
-        button.classList.remove("active");
-
-    });
-
-    document.getElementById(page+"Page").classList.add("active-page");
-
-    document
-        .querySelector(`[data-page="${page}"]`)
-        .classList.add("active");
-
-    pageTitle.textContent=
-
-        page.charAt(0).toUpperCase()+
-
-        page.slice(1);
-
-}
-
-/*==================================================
-    Dashboard
-==================================================*/
-
-function updateDashboard(){
-
-    totalFlavors.textContent=flavors.length;
-
-    availableFlavors.textContent=
-
-        flavors.filter(f=>f.available).length;
-
-    featuredFlavors.textContent=
-
-        flavors.filter(f=>f.featured).length;
-
-    categoryCount.textContent=
-
-        categories.length;
-
-}
-
-/*==================================================
-    Firestore Loading
-==================================================*/
-
-async function loadEverything(){
-
-    await loadCategories();
-
-    await loadFlavors();
-
-}
-
-async function loadCategories(){
-
-    categories=[];
-
-    const snapshot=await getDocs(categoriesCollection);
-
-    snapshot.forEach(document=>{
-
-        categories.push({
-
-            id:document.id,
-
-            ...document.data()
-
-        });
-
-    });
-
-    updateDashboard();
-
-}
-
-async function loadFlavors(){
-
-    flavors=[];
-
-    const snapshot=await getDocs(flavorsCollection);
-
-    snapshot.forEach(document=>{
-
-        flavors.push({
-
-            id:document.id,
-
-            ...document.data()
-
-        });
-
-    });
-
-    updateDashboard();
-
-}
-/*==================================================
-    DOM ELEMENTS
-==================================================*/
-
-const flavorList = document.getElementById("flavorList");
-
+let currentFlavor = null;
+let flavorToDelete = null;
+
+/* API Base URL */
+const API_URL = 'api.php';
+
+/* DOM Elements */
+const pages = document.querySelectorAll(".page");
+const navItems = document.querySelectorAll(".nav-item");
+const flavorsGrid = document.getElementById("flavorsGrid");
+const categoriesList = document.getElementById("categoriesList");
+const filterCategory = document.getElementById("filterCategory");
+const filterStatus = document.getElementById("filterStatus");
 const searchFlavor = document.getElementById("searchFlavor");
 
-const addFlavorButton = document.getElementById("addFlavorButton");
-
+/* Modal Elements */
 const flavorModal = document.getElementById("flavorModal");
+const flavorForm = document.getElementById("flavorForm");
+const modalTitle = document.getElementById("modalTitle");
+const addFlavorButton = document.getElementById("addFlavorButton");
+const closeFlavor = document.getElementById("closeFlavor");
+const duplicateFlavorButton = document.getElementById("duplicateFlavorButton");
+const deleteFlavorButton = document.getElementById("deleteFlavorButton");
 
-const closeFlavorModal =
-document.getElementById("closeFlavorModal");
+/* Confirm Modal Elements */
+const confirmModal = document.getElementById("confirmModal");
+const cancelConfirm = document.getElementById("cancelConfirm");
+const confirmDelete = document.getElementById("confirmDelete");
 
-const modalTitle =
-document.getElementById("modalTitle");
+/* Category Elements */
+const categoryNameInput = document.getElementById("categoryName");
+const addCategoryButton = document.getElementById("addCategoryButton");
 
-const flavorName =
-document.getElementById("flavorName");
-
-const flavorPrice =
-document.getElementById("flavorPrice");
-
-const flavorDescription =
-document.getElementById("flavorDescription");
-
-const flavorCategory =
-document.getElementById("flavorCategory");
-
-const imageURL =
-document.getElementById("imageURL");
-
-const imageUpload =
-document.getElementById("imageUpload");
-
-const previewImage =
-document.getElementById("previewImage");
-
-const featuredSwitch =
-document.getElementById("featuredSwitch");
-
-const availableSwitch =
-document.getElementById("availableSwitch");
+/* Dashboard Stat Elements */
+const statFlavors = document.getElementById("statFlavors");
+const statCategories = document.getElementById("statCategories");
+const statImages = document.getElementById("statImages");
 
 /*==================================================
-    MODAL
+    NAVIGATION SYSTEM
 ==================================================*/
+function showPage(pageId) {
+    pages.forEach(page => page.classList.remove("active"));
+    navItems.forEach(item => item.classList.remove("active"));
 
-function openFlavorModal(){
-
-    flavorModal.classList.remove("hidden");
-
-}
-
-function closeFlavor(){
-
-    flavorModal.classList.add("hidden");
-
-    currentFlavor = null;
-
-}
-
-closeFlavorModal.addEventListener(
-
-    "click",
-
-    closeFlavor
-
-);
-
-/*==================================================
-    IMAGE PREVIEW
-==================================================*/
-
-imageURL.addEventListener("input",()=>{
-
-    if(imageURL.value.trim()===""){
-
-        previewImage.src="placeholder.png";
-
-        return;
-
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+        targetPage.classList.add("active");
     }
 
-    previewImage.src=imageURL.value;
+    const activeNav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+    if (activeNav) {
+        activeNav.classList.add("active");
+    }
+}
 
+navItems.forEach(item => {
+    item.addEventListener("click", () => {
+        const page = item.getAttribute("data-page");
+        showPage(page);
+    });
 });
 
-imageUpload.addEventListener("change",()=>{
-
-    const file=imageUpload.files[0];
-
-    if(!file) return;
-
-    previewImage.src=
-
-        URL.createObjectURL(file);
-
-});
+/* Sidebar Toggle */
+const toggleSidebar = document.getElementById("toggleSidebar");
+if (toggleSidebar) {
+    toggleSidebar.addEventListener("click", () => {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+    });
+}
 
 /*==================================================
-    NEW FLAVOR
+    FETCH DATA FROM PHP BACKEND
 ==================================================*/
+async function loadData() {
+    try {
+        const response = await fetch(`${API_URL}?action=get_all`);
+        const data = await response.json();
 
-addFlavorButton.addEventListener(
+        flavors = data.flavors || [];
+        categories = data.categories || [];
 
-    "click",
-
-    ()=>{
-
-        currentFlavor=null;
-
-        modalTitle.textContent="New Flavor";
-
-        flavorName.value="";
-
-        flavorPrice.value="";
-
-        flavorDescription.value="";
-
-        imageURL.value="";
-
-        previewImage.src="placeholder.png";
-
-        featuredSwitch.checked=false;
-
-        availableSwitch.checked=true;
-
-        openFlavorModal();
-
+        renderFlavors();
+        renderCategories();
+        populateCategoryDropdowns();
+        updateStats();
+    } catch (error) {
+        console.error("Error loading data from server:", error);
     }
+}
 
-);
+/*==================================================
+    DASHBOARD STATS
+==================================================*/
+function updateStats() {
+    if (statFlavors) statFlavors.textContent = flavors.length;
+    if (statCategories) statCategories.textContent = categories.length;
+    if (statImages) statImages.textContent = flavors.filter(f => f.image).length;
+}
+
 /*==================================================
     RENDER FLAVORS
 ==================================================*/
+function renderFlavors() {
+    if (!flavorsGrid) return;
 
-function renderFlavors(list = flavors){
+    const catFilter = filterCategory ? filterCategory.value : "all";
+    const statusFilter = filterStatus ? filterStatus.value : "all";
+    const searchQuery = searchFlavor ? searchFlavor.value.toLowerCase() : "";
 
-    flavorList.innerHTML = "";
+    const filtered = flavors.filter(flavor => {
+        const matchesCategory = (catFilter === "all" || flavor.category === catFilter);
+        const matchesStatus = (statusFilter === "all" || flavor.status === statusFilter);
+        const matchesSearch = flavor.name.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesStatus && matchesSearch;
+    });
 
-    if(list.length === 0){
+    flavorsGrid.innerHTML = "";
 
-        flavorList.innerHTML = `
-            <div class="empty-state">
-                No flavors found.
-            </div>
-        `;
-
+    if (filtered.length === 0) {
+        flavorsGrid.innerHTML = `<p class="no-results">No flavors found.</p>`;
         return;
-
     }
 
-    list.forEach(flavor=>{
-
+    filtered.forEach(flavor => {
         const card = document.createElement("div");
-
         card.className = "flavor-card";
-
         card.innerHTML = `
-
-            <img
-                src="${flavor.image || "placeholder.png"}"
-                class="flavor-image">
-
+            <img class="flavor-image" src="${flavor.image || 'https://via.placeholder.com/300x180?text=No+Image'}" alt="${flavor.name}">
             <div class="flavor-content">
-
                 <h3>${flavor.name}</h3>
-
-                <p>${flavor.description || ""}</p>
-
-                <span>${flavor.category || ""}</span>
-
+                <p>${flavor.description || 'No description provided.'}</p>
+                <span>${flavor.category || 'Uncategorized'}</span>
             </div>
+        `;
+        card.addEventListener("click", () => editFlavor(flavor));
+        flavorsGrid.appendChild(card);
+    });
+}
 
+/* Filter Handlers */
+if (filterCategory) filterCategory.addEventListener("change", renderFlavors);
+if (filterStatus) filterStatus.addEventListener("change", renderFlavors);
+if (searchFlavor) searchFlavor.addEventListener("input", renderFlavors);
+
+/*==================================================
+    RENDER & MANAGE CATEGORIES
+==================================================*/
+function renderCategories() {
+    if (!categoriesList) return;
+    categoriesList.innerHTML = "";
+
+    categories.forEach(cat => {
+        const li = document.createElement("li");
+        li.className = "category-item";
+        li.innerHTML = `
+            <span>${cat.name}</span>
+            <button class="btn-icon delete-cat-btn"><i class="fa-solid fa-trash"></i></button>
         `;
 
-        card.addEventListener("click",()=>{
-
-            editFlavor(flavor);
-
+        li.querySelector(".delete-cat-btn").addEventListener("click", async (e) => {
+            e.stopPropagation();
+            if (confirm(`Delete category "${cat.name}"?`)) {
+                await fetch(`${API_URL}?action=delete_category&id=${cat.id}`, { method: 'DELETE' });
+                await loadData();
+            }
         });
 
-        flavorList.appendChild(card);
-
+        categoriesList.appendChild(li);
     });
+}
 
+function populateCategoryDropdowns() {
+    const flavorCategorySelect = document.getElementById("flavorCategory");
+
+    if (filterCategory) {
+        const currentVal = filterCategory.value;
+        filterCategory.innerHTML = `<option value="all">All Categories</option>`;
+        categories.forEach(cat => {
+            filterCategory.innerHTML += `<option value="${cat.name}">${cat.name}</option>`;
+        });
+        filterCategory.value = currentVal;
+    }
+
+    if (flavorCategorySelect) {
+        flavorCategorySelect.innerHTML = `<option value="">Select Category</option>`;
+        categories.forEach(cat => {
+            flavorCategorySelect.innerHTML += `<option value="${cat.name}">${cat.name}</option>`;
+        });
+    }
+}
+
+if (addCategoryButton) {
+    addCategoryButton.addEventListener("click", async () => {
+        const name = categoryNameInput.value.trim();
+        if (!name) return alert("Please enter a category name.");
+
+        await fetch(`${API_URL}?action=add_category`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name })
+        });
+
+        categoryNameInput.value = "";
+        await loadData();
+    });
 }
 
 /*==================================================
-    EDIT FLAVOR
+    FLAVOR MODAL ACTIONS & SAVE
 ==================================================*/
-
-function editFlavor(flavor){
-
+function openFlavorModal(flavor = null) {
     currentFlavor = flavor;
+    flavorModal.classList.add("active");
 
-    modalTitle.textContent = "Edit Flavor";
+    if (flavor) {
+        modalTitle.textContent = "Edit Flavor";
+        document.getElementById("flavorName").value = flavor.name || "";
+        document.getElementById("flavorCategory").value = flavor.category || "";
+        document.getElementById("flavorDescription").value = flavor.description || "";
+        document.getElementById("flavorImage").value = flavor.image || "";
+        document.getElementById("flavorBadge").value = flavor.badge || "";
+        document.getElementById("flavorStatus").value = flavor.status || "active";
 
-    flavorName.value = flavor.name || "";
+        duplicateFlavorButton.style.display = "inline-block";
+        deleteFlavorButton.style.display = "inline-block";
+    } else {
+        modalTitle.textContent = "Add New Flavor";
+        flavorForm.reset();
 
-    flavorPrice.value = flavor.price || "";
-
-    flavorDescription.value =
-        flavor.description || "";
-
-    imageURL.value =
-        flavor.image || "";
-
-    previewImage.src =
-        flavor.image || "placeholder.png";
-
-    featuredSwitch.checked =
-        flavor.featured || false;
-
-    availableSwitch.checked =
-        flavor.available ?? true;
-
-    flavorCategory.value =
-        flavor.category || "";
-
-    openFlavorModal();
-
+        duplicateFlavorButton.style.display = "none";
+        deleteFlavorButton.style.display = "none";
+    }
 }
 
-/*==================================================
-    SEARCH
-==================================================*/
+function editFlavor(flavor) {
+    openFlavorModal(flavor);
+}
 
-searchFlavor.addEventListener("input",()=>{
+if (addFlavorButton) {
+    addFlavorButton.addEventListener("click", () => openFlavorModal(null));
+}
 
-    const value =
-        searchFlavor.value
-        .toLowerCase()
-        .trim();
-
-    const filtered = flavors.filter(flavor=>{
-
-        return (
-
-            (flavor.name || "")
-            .toLowerCase()
-            .includes(value)
-
-            ||
-
-            (flavor.category || "")
-            .toLowerCase()
-            .includes(value)
-
-        );
-
+if (closeFlavor) {
+    closeFlavor.addEventListener("click", () => {
+        flavorModal.classList.remove("active");
+        currentFlavor = null;
     });
-
-    renderFlavors(filtered);
-
-});
-t/*==================================================
-    SAVE FLAVOR
-==================================================*/
-
-const saveFlavor =
-document.getElementById("saveFlavor");
-
-saveFlavor.addEventListener("click",async()=>{
-
-    const data={
-
-        name:flavorName.value.trim(),
-
-        price:Number(flavorPrice.value)||0,
-
-        description:flavorDescription.value.trim(),
-
-        category:flavorCategory.value,
-
-        image:imageURL.value.trim(),
-
-        featured:featuredSwitch.checked,
-
-        available:availableSwitch.checked
-
-    };
-
-    if(data.name===""){
-
-        alert("Please enter a flavor name.");
-
-        return;
-
-    }
-
-    if(currentFlavor){
-
-        await updateDoc(
-
-            doc(db,"flavors",currentFlavor.id),
-
-            data
-
-        );
-
-    }else{
-
-        await addDoc(
-
-            flavorsRef,
-
-            data
-
-        );
-
-    }
-
-    closeFlavor();
-
-    await loadFlavors();
-
-    renderFlavors();
-
-    updateDashboard();
-
-});
-
-/*==================================================
-    DELETE FLAVOR
-==================================================*/
-
-const deleteFlavorButton =
-document.getElementById("deleteFlavor");
-
-deleteFlavorButton.addEventListener(
-
-    "click",
-
-    ()=>{
-
-        if(!currentFlavor) return;
-
-        document
-        .getElementById("confirmModal")
-        .classList
-        .remove("hidden");
-
-    }
-
-);
-
-document
-.getElementById("cancelDelete")
-.addEventListener("click",()=>{
-
-    document
-    .getElementById("confirmModal")
-    .classList
-    .add("hidden");
-
-});
-
-document
-.getElementById("confirmDelete")
-.addEventListener("click",async()=>{
-
-    if(!currentFlavor) return;
-
-    await deleteDoc(
-
-        doc(db,"flavors",currentFlavor.id)
-
-    );
-
-    document
-    .getElementById("confirmModal")
-    .classList
-    .add("hidden");
-
-    closeFlavor();
-
-    await loadFlavors();
-
-    renderFlavors();
-
-    updateDashboard();
-
-});
-
-/*==================================================
-    DUPLICATE FLAVOR
-==================================================*/
-
-const duplicateFlavorButton =
-document.getElementById("duplicateFlavor");
-
-duplicateFlavorButton.addEventListener(
-
-    "click",
-
-    async()=>{
-
-        if(!currentFlavor) return;
-
-        const copy={
-
-            ...currentFlavor,
-
-            name:currentFlavor.name+" Copy"
-
+}
+
+/* Save Flavor Handler */
+if (flavorForm) {
+    flavorForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const payload = {
+            name: document.getElementById("flavorName").value.trim(),
+            category: document.getElementById("flavorCategory").value,
+            description: document.getElementById("flavorDescription").value.trim(),
+            image: document.getElementById("flavorImage").value.trim(),
+            badge: document.getElementById("flavorBadge").value.trim(),
+            status: document.getElementById("flavorStatus").value
         };
 
-        delete copy.id;
-
-        await addDoc(
-
-            flavorsRef,
-
-            copy
-
-        );
-
-        await loadFlavors();
-
-        renderFlavors();
-
-        updateDashboard();
-
-    }
-
-);
-/*==================================================
-    CATEGORIES
-==================================================*/
-
-function renderCategories(){
-
-    flavorCategory.innerHTML="";
-
-    categories.forEach(category=>{
-
-        const option=document.createElement("option");
-
-        option.value=category.name;
-
-        option.textContent=category.name;
-
-        flavorCategory.appendChild(option);
-
-    });
-
-}
-
-document
-.getElementById("addCategoryButton")
-.addEventListener("click",async()=>{
-
-    const name=prompt("Category name");
-
-    if(!name) return;
-
-    await addDoc(
-
-        categoriesRef,
-
-        {
-
-            name:name.trim()
-
+        if (currentFlavor) {
+            payload.id = currentFlavor.id;
+            await fetch(`${API_URL}?action=update_flavor`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } else {
+            await fetch(`${API_URL}?action=add_flavor`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
         }
 
-    );
+        flavorModal.classList.remove("active");
+        currentFlavor = null;
+        flavorForm.reset();
+        await loadData();
+    });
+}
 
-    await loadCategories();
+/* Duplicate Flavor */
+if (duplicateFlavorButton) {
+    duplicateFlavorButton.addEventListener("click", async () => {
+        if (!currentFlavor) return;
 
-    renderCategories();
+        const copy = {
+            name: `${currentFlavor.name} (Copy)`,
+            category: currentFlavor.category || "",
+            description: currentFlavor.description || "",
+            image: currentFlavor.image || "",
+            badge: currentFlavor.badge || "",
+            status: currentFlavor.status || "active"
+        };
 
-    updateDashboard();
+        await fetch(`${API_URL}?action=add_flavor`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(copy)
+        });
 
-});
+        flavorModal.classList.remove("active");
+        currentFlavor = null;
+        await loadData();
+    });
+}
 
-/*==================================================
-    QUICK BUTTONS
-==================================================*/
+/* Delete Flavor Flow */
+if (deleteFlavorButton) {
+    deleteFlavorButton.addEventListener("click", () => {
+        if (!currentFlavor) return;
+        flavorToDelete = currentFlavor;
+        confirmModal.classList.add("active");
+    });
+}
 
-document
-.getElementById("quickAddFlavor")
-.onclick=()=>{
+if (cancelConfirm) {
+    cancelConfirm.addEventListener("click", () => {
+        confirmModal.classList.remove("active");
+        flavorToDelete = null;
+    });
+}
 
-    openPage("flavors");
-
-    addFlavorButton.click();
-
-};
-
-document
-.getElementById("quickManageCategories")
-.onclick=()=>{
-
-    openPage("categories");
-
-};
-
-document
-.getElementById("quickImages")
-.onclick=()=>{
-
-    openPage("images");
-
-};
-
-document
-.getElementById("quickSettings")
-.onclick=()=>{
-
-    openPage("settings");
-
-};
-
-/*==================================================
-    SETTINGS
-==================================================*/
-
-document
-.getElementById("saveSettings")
-.addEventListener("click",()=>{
-
-    showToast("Settings saved");
-
-});
-
-/*==================================================
-    TOAST
-==================================================*/
-
-const toast=document.getElementById("toast");
-
-function showToast(message){
-
-    toast.textContent=message;
-
-    toast.classList.add("show");
-
-    setTimeout(()=>{
-
-        toast.classList.remove("show");
-
-    },2500);
-
+if (confirmDelete) {
+    confirmDelete.addEventListener("click", async () => {
+        if (flavorToDelete) {
+            await fetch(`${API_URL}?action=delete_flavor&id=${flavorToDelete.id}`, { method: 'DELETE' });
+            confirmModal.classList.remove("active");
+            flavorModal.classList.remove("active");
+            flavorToDelete = null;
+            currentFlavor = null;
+            await loadData();
+        }
+    });
 }
 
 /*==================================================
-    LOADING
+    QUICK ACTIONS (DASHBOARD)
 ==================================================*/
+const quickAddFlavor = document.getElementById("quickAddFlavor");
+const quickManageCategories = document.getElementById("quickManageCategories");
+const quickImages = document.getElementById("quickImages");
+const quickSettings = document.getElementById("quickSettings");
 
-const loading=document.getElementById("loadingOverlay");
-
-function showLoading(){
-
-    loading.classList.remove("hidden");
-
+if (quickAddFlavor) {
+    quickAddFlavor.onclick = () => {
+        showPage("flavors");
+        openFlavorModal(null);
+    };
 }
 
-function hideLoading(){
-
-    loading.classList.add("hidden");
-
+if (quickManageCategories) {
+    quickManageCategories.onclick = () => showPage("categories");
 }
 
-/*==================================================
-    INITIALIZE CMS
-==================================================*/
-
-async function initializeCMS(){
-
-    showLoading();
-
-    await loadCategories();
-
-    await loadFlavors();
-
-    renderCategories();
-
-    renderFlavors();
-
-    updateDashboard();
-
-    hideLoading();
-
+if (quickImages) {
+    quickImages.onclick = () => showPage("images");
 }
 
-/*==================================================
-    PAGE DEFAULT
-==================================================*/
+if (quickSettings) {
+    quickSettings.onclick = () => showPage("settings");
+}
 
-openPage("dashboard");
+/* Initial Load & Page Setup */
+showPage("dashboard");
+loadData();
