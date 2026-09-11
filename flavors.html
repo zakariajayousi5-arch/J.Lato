@@ -1,167 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Flavors | J.Lato Gelateria & Café</title>
 
-<meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<title>J.Lato | Flavors</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="flavors.css">
-
-<script type="module" src="flavors.js"></script>
-
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 </head>
-
-
 <body>
 
-
-<header class="hero">
-
-<img src="logo.png" class="logo" alt="J.Lato" style="justify-content:center;"height="260px" width="260px">
-
-
-<h1>
-Our Flavors
-</h1>
-
-
-<p>
-Freshly made gelato creations
-</p>
-
-
-</header>
-
-
-<main>
-
-
-<section class="category-section">
-
-<h2>
-Our Menu
-</h2>
-
-
-<div id="flavorGrid" class="flavor-grid">
-
-
-<p class="loading">
-Loading flavors...
-</p>
-
-
-</div>
-
-
-</section>
-
-<!-- FILTER BAR -->
-
-<section class="filter-section">
-
-    <div class="filter-buttons">
-
-        <button class="filter-btn active" data-filter="all">
-            All
-        </button>
-
-        <button class="filter-btn" data-filter="Popular">
-            Popular
-        </button>
-
-        <button class="filter-btn" data-filter="Must Try">
-            Must Try
-        </button>
-
-        <button class="filter-btn" data-filter="Our Creation">
-            Our Creation
-        </button>
-
-        <button class="filter-btn" data-filter="Classic">
-            Classic
-        </button>
-
-        <button class="filter-btn" data-filter="Seasonal">
-            Seasonal
-        </button>
-
-    </div>
-
-</section>
-
-<!-- TEMPLATE (Hidden - JavaScript Uses This) -->
-
-<template id="flavorTemplate">
-
-    <article class="flavor-card">
-
-        <img
-            class="flavor-image"
-            src="placeholder.png"
-            alt="Flavor">
-
-        <div class="flavor-info">
-
-            <span class="flavor-category">
-                Category
-            </span>
-
-            <h3 class="flavor-name">
-                Flavor Name
-            </h3>
-
-            <p class="flavor-description">
-                Description...
-            </p>
-
-            <div class="flavor-footer">
-
-                <span class="flavor-price">
-                    0 AED
-                </span>
-
-                <span class="featured-badge">
-                    ⭐ Featured
-                </span>
-
-            </div>
-
+    <!-- HEADER / NAVIGATION -->
+    <header class="navbar">
+        <div class="container flex-between">
+            <a href="index.html" class="brand-logo">J.Lato</a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="flavors.html" class="active">Flavors</a>
+                <a href="admin.html">Admin</a>
+            </nav>
         </div>
+    </header>
 
-    </article>
+    <!-- HERO SECTION -->
+    <section class="hero-small">
+        <div class="container text-center">
+            <h1>Our Gelato Flavors</h1>
+            <p>Handcrafted daily using traditional recipes and premium natural ingredients.</p>
+        </div>
+    </section>
 
-</template>
+    <!-- DYNAMIC FLAVORS GRID -->
+    <main class="container page-content">
+        <div class="flavors-grid" id="customerFlavorsGrid">
+            <!-- Dynamically populated via flavors.js from api.php -->
+        </div>
+    </main>
 
-<!-- EMPTY STATE -->
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; J.Lato Gelateria & Café. All rights reserved.</p>
+        </div>
+    </footer>
 
-<section
-    id="emptyState"
-    class="empty-state"
-    style="display:none;">
-
-    <h2>No Flavors Available</h2>
-
-    <p>
-
-        Please check back later.
-
-    </p>
-
-</section>
-</main>
-
+    <!-- CLIENT SCRIPT -->
+    <script src="flavors.js" defer></script>
 
 </body>
-
 </html>
