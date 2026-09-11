@@ -6,7 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 $dataFile = 'data.json';
 
-// Utility to read JSON file
+// Read JSON file
 function readData($file) {
     if (!file_exists($file)) {
         return ["flavors" => [], "categories" => []];
@@ -15,7 +15,7 @@ function readData($file) {
     return json_decode($content, true);
 }
 
-// Utility to write JSON file
+// Write JSON file
 function writeData($file, $data) {
     file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT));
 }
@@ -35,6 +35,38 @@ switch ($method) {
         break;
 
     case 'POST':
+        // Handle Image Uploads
+        if ($action === 'upload_image') {
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = 'uploads/';
+                
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                $fileTmpPath = $_FILES['image']['tmp_name'];
+                $fileName = $_FILES['image']['name'];
+                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+                
+                if (in_array($fileExtension, $allowedExtensions)) {
+                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                    $destPath = $uploadDir . $newFileName;
+
+                    if (move_uploaded_file($fileTmpPath, $destPath)) {
+                        echo json_encode(["status" => "success", "url" => $destPath]);
+                        exit;
+                    }
+                }
+                echo json_encode(["status" => "error", "message" => "Invalid file format or upload failed"]);
+                exit;
+            }
+            echo json_encode(["status" => "error", "message" => "No file uploaded"]);
+            exit;
+        }
+
+        // Handle JSON payloads
         $input = json_decode(file_get_contents('php://input'), true);
 
         if ($action === 'add_flavor') {
