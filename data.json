@@ -1,0 +1,23 @@
+{
+  "flavors": [
+    {
+      "id": "1",
+      "name": "Pistachio Bronte",
+      "category": "Classics",
+      "description": "Traditional Sicilian pistachio gelato made with real Bronte pistachios.",
+      "image": "https://via.placeholder.com/300x180?text=Pistachio",
+      "badge": "Bestseller",
+      "status": "active"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Classics"
+    },
+    {
+      "id": "2",
+      "name": "Fruit & Sorbet"
+    }
+  ]
+}
