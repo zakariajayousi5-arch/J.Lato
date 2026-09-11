@@ -1,839 +1,292 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J.Lato Admin Panel</title>
 
-<meta charset="UTF-8">
+    <link rel="stylesheet" href="admin.css">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
-
-<title>
-
-J.Lato Admin CMS
-
-</title>
-
-<link rel="preconnect"
-      href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-      rel="stylesheet">
-
-<link
-      rel="stylesheet"
-      href="admin.css">
-
-<script
-        type="module"
-        src="admin-v2.js"
-        defer>
-</script>
-
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-resources/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- LOGIN -->
-
-<div
-     id="loginScreen"
-     class="login-screen">
-
-    <div class="login-card">
-
-        <img
-             src="logo.png"
-             class="login-logo"
-             alt="J.Lato">
-
-        <h1>
-
-            J.Lato
-
-        </h1>
-
-        <p>
-
-            Content Management System
-
-        </p>
-
-        <input
-
-               id="password"
-
-               type="password"
-
-               placeholder="Enter Password"
-
-               autocomplete="off">
-
-        <button
-
-                id="loginButton">
-
-            Login
-
-        </button>
-
-        <p
-           id="loginMessage"
-           class="login-message">
-
-        </p>
-
-    </div>
-
-</div>
-
-<!-- APP -->
-
-<div
-     id="app"
-     class="app hidden">
+<div class="admin-wrapper">
 
     <!-- SIDEBAR -->
-
     <aside class="sidebar">
-
         <div class="brand">
-
-            <img
-                 src="logo.png"
-                 alt="Logo">
-
-            <div>
-
-                <h2>
-
-                    J.Lato
-
-                </h2>
-
-                <span>
-
-                    Admin 
-
-                </span>
-
-            </div>
-
+            <h2>J.Lato</h2>
+            <span>ADMIN PANEL</span>
         </div>
 
-        <nav>
-
-            <button
-                    class="menu-button active"
-                    data-page="dashboard">
-
-                📊 Dashboard
-
+        <nav class="nav">
+            <button class="nav-item active" data-page="dashboard">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
             </button>
 
-            <button
-                    class="menu-button"
-                    data-page="flavors">
-
-                🍨 Flavors
-
+            <button class="nav-item" data-page="flavors">
+                <i class="fa-solid fa-ice-cream"></i> Flavors
             </button>
 
-            <button
-                    class="menu-button"
-                    data-page="categories">
-
-                📂 Categories
-
+            <button class="nav-item" data-page="categories">
+                <i class="fa-solid fa-tags"></i> Categories
             </button>
 
-            <button
-                    class="menu-button"
-                    data-page="images">
-
-                🖼 Images
-
+            <button class="nav-item" data-page="images">
+                <i class="fa-solid fa-image"></i> Image Gallery
             </button>
 
-            <button
-                    class="menu-button"
-                    data-page="settings">
-
-                ⚙ Settings
-
+            <button class="nav-item" data-page="settings">
+                <i class="fa-solid fa-gear"></i> Settings
             </button>
-
         </nav>
 
+        <button class="logout" id="logoutBtn">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
     </aside>
 
-    <!-- MAIN -->
+    <!-- MAIN CONTENT -->
+    <main class="main">
 
-    <main class="main-content">
-
+        <!-- TOP BAR -->
         <header class="topbar">
-
-            <div>
-
-                <h1
-                    id="pageTitle">
-
-                    Dashboard
-
-                </h1>
-
-                <p>
-
-                    
-
-                </p>
-
-            </div>
-
-            <button
-                    id="logoutButton">
-
-                Logout
-
+            <button id="toggleSidebar" class="toggle-btn">
+                <i class="fa-solid fa-bars"></i>
             </button>
 
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="globalSearch" placeholder="Search flavors, categories...">
+            </div>
+
+            <div class="user">
+                <span>Welcome, Admin</span>
+            </div>
         </header>
-<!-- DASHBOARD PAGE -->
 
-<section
-    id="dashboardPage"
-    class="page active-page">
-
-    <div class="stats-grid">
-
-        <div class="stat-card">
-
-            <span class="stat-icon">🍨</span>
-
-            <div>
-
-                <h2 id="totalFlavors">
-
-                    0
-
-                </h2>
-
-                <p>
-
-                    Total Flavors
-
-                </p>
-
+        <!-- DASHBOARD PAGE -->
+        <section class="page active" id="dashboard">
+            <div class="page-title">
+                <h1>Dashboard Overview</h1>
+                <p>Welcome back! Here is what's happening today.</p>
             </div>
 
-        </div>
-
-        <div class="stat-card">
-
-            <span class="stat-icon">✅</span>
-
-            <div>
-
-                <h2 id="availableFlavors">
-
-                    0
-
-                </h2>
-
-                <p>
-
-                    Available
-
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="stat-card">
-
-            <span class="stat-icon">⭐</span>
-
-            <div>
-
-                <h2 id="featuredFlavors">
-
-                    0
-
-                </h2>
-
-                <p>
-
-                    Featured
-
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="stat-card">
-
-            <span class="stat-icon">📂</span>
-
-            <div>
-
-                <h2 id="categoryCount">
-
-                    0
-
-                </h2>
-
-                <p>
-
-                    Categories
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="dashboard-grid">
-
-        <section class="dashboard-card">
-
-            <h2>
-
-                Quick Actions
-
-            </h2>
-
-            <div class="quick-buttons">
-
-                <button
-                    id="quickAddFlavor">
-
-                    ➕ Add Flavor
-
-                </button>
-
-                <button
-                    id="quickManageCategories">
-
-                    📂 Categories
-
-                </button>
-
-                <button
-                    id="quickImages">
-
-                    🖼 Images
-
-                </button>
-
-                <button
-                    id="quickSettings">
-
-                    ⚙ Settings
-
-                </button>
-
-            </div>
-
-        </section>
-
-        <section class="dashboard-card">
-
-            <h2>
-
-                System Status
-
-            </h2>
-
-            <ul class="status-list">
-
-                <li>
-
-                    <span>Firebase</span>
-
-                    <strong id="firebaseStatus">
-
-                        Connected
-
-                    </strong>
-
-                </li>
-
-                <li>
-
-                    <span>Database</span>
-
-                    <strong id="databaseStatus">
-
-                        Ready
-
-                    </strong>
-
-                </li>
-
-                <li>
-
-                    <span>Website</span>
-
-                    <strong id="websiteStatus">
-
-                        Online
-
-                    </strong>
-
-                </li>
-
-            </ul>
-
-        </section>
-
-    </div>
-
-</section>
-<!-- FLAVORS PAGE -->
-
-<section
-    id="flavorsPage"
-    class="page">
-
-    <div class="page-toolbar">
-
-        <div class="search-box">
-
-            <input
-                id="searchFlavor"
-                type="text"
-                placeholder="Search flavors...">
-
-        </div>
-
-        <button
-            id="addFlavorButton"
-            class="primary-button">
-
-            ➕ Add Flavor
-
-        </button>
-
-    </div>
-
-    <div
-        id="flavorList"
-        class="flavor-list">
-
-        <!-- Flavor cards appear here -->
-
-    </div>
-
-</section>
-
-<!-- FLAVOR EDITOR MODAL -->
-
-<div
-    id="flavorModal"
-    class="modal hidden">
-
-    <div class="modal-card large">
-
-        <div class="modal-header">
-
-            <h2 id="modalTitle">
-
-                New Flavor
-
-            </h2>
-
-            <button
-                id="closeFlavorModal">
-
-                ✕
-
-            </button>
-
-        </div>
-
-        <div class="modal-body">
-
-            <div class="image-panel">
-
-                <img
-                    id="previewImage"
-                    src="placeholder.png"
-                    alt="Preview">
-
-                <input
-                    id="imageURL"
-                    type="text"
-                    placeholder="Paste Image URL">
-
-                <input
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*">
-
-            </div>
-
-            <div class="editor-panel">
-
-                <label>
-
-                    Flavor Name
-
-                </label>
-
-                <input
-                    id="flavorName"
-                    type="text">
-
-                <label>
-
-                    Price (AED)
-
-                </label>
-
-                <input
-                    id="flavorPrice"
-                    type="number">
-
-                <label>
-
-                    Description
-
-                </label>
-
-                <textarea
-                    id="flavorDescription"
-                    rows="5"></textarea>
-
-                <label>
-
-                    Category
-
-                </label>
-
-                <select
-                    id="flavorCategory">
-
-                </select>
-
-                <div class="switch-group">
-
-                    <label>
-
-                        <input
-                            id="featuredSwitch"
-                            type="checkbox">
-
-                        Featured Flavor
-
-                    </label>
-
-                    <label>
-
-                        <input
-                            id="availableSwitch"
-                            type="checkbox"
-                            checked>
-
-                        Available
-
-                    </label>
-
+            <div class="stats-grid">
+                <div class="card stat">
+                    <div class="stat-icon"><i class="fa-solid fa-ice-cream"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Flavors</h3>
+                        <p id="statFlavors">0</p>
+                    </div>
                 </div>
 
+                <div class="card stat">
+                    <div class="stat-icon"><i class="fa-solid fa-tags"></i></div>
+                    <div class="stat-info">
+                        <h3>Categories</h3>
+                        <p id="statCategories">0</p>
+                    </div>
+                </div>
+
+                <div class="card stat">
+                    <div class="stat-icon"><i class="fa-solid fa-image"></i></div>
+                    <div class="stat-info">
+                        <h3>Images</h3>
+                        <p id="statImages">0</p>
+                    </div>
+                </div>
             </div>
 
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-buttons">
+                    <button id="quickAddFlavor" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add New Flavor</button>
+                    <button id="quickManageCategories" class="btn btn-secondary"><i class="fa-solid fa-tags"></i> Manage Categories</button>
+                    <button id="quickImages" class="btn btn-secondary"><i class="fa-solid fa-image"></i> Manage Images</button>
+                    <button id="quickSettings" class="btn btn-secondary"><i class="fa-solid fa-gear"></i> Settings</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLAVORS PAGE -->
+        <section class="page" id="flavors">
+            <div class="page-title flex-between">
+                <div>
+                    <h1>Flavors Management</h1>
+                    <p>Create, edit, and reorganize your gelato flavors.</p>
+                </div>
+                <button class="btn btn-primary" id="addFlavorButton">
+                    <i class="fa-solid fa-plus"></i> Add New Flavor
+                </button>
+            </div>
+
+            <div class="filters card">
+                <select id="filterCategory">
+                    <option value="all">All Categories</option>
+                </select>
+
+                <select id="filterStatus">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+
+                <input type="text" id="searchFlavor" placeholder="Search flavor by name...">
+            </div>
+
+            <div class="flavors-grid" id="flavorsGrid">
+                <!-- Dynamically populated via admin.js -->
+            </div>
+        </section>
+
+        <!-- CATEGORIES PAGE -->
+        <section class="page" id="categories">
+            <div class="page-title flex-between">
+                <div>
+                    <h1>Categories</h1>
+                    <p>Organize your gelato types (e.g. Classics, Fruit, Vegan).</p>
+                </div>
+            </div>
+
+            <div class="categories-wrapper">
+                <div class="card category-form-card">
+                    <h3>Add New Category</h3>
+                    <div class="form-group">
+                        <label for="categoryName">Category Name</label>
+                        <input type="text" id="categoryName" placeholder="e.g. Seasonal Specials">
+                    </div>
+                    <button class="btn btn-primary" id="addCategoryButton">Add Category</button>
+                </div>
+
+                <div class="card category-list-card">
+                    <h3>Existing Categories</h3>
+                    <ul class="category-list" id="categoriesList">
+                        <!-- Dynamically populated via admin.js -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- IMAGES PAGE -->
+        <section class="page" id="images">
+            <div class="page-title flex-between">
+                <div>
+                    <h1>Image Gallery</h1>
+                    <p>Upload and manage image assets for your flavors.</p>
+                </div>
+                <button class="btn btn-primary" id="uploadImageButton">
+                    <i class="fa-solid fa-upload"></i> Upload Image
+                </button>
+            </div>
+
+            <div class="images-grid" id="imagesGrid">
+                <!-- Dynamically populated via admin.js -->
+            </div>
+        </section>
+
+        <!-- SETTINGS PAGE -->
+        <section class="page" id="settings">
+            <div class="page-title">
+                <h1>Store Settings</h1>
+                <p>Configure shop information and defaults.</p>
+            </div>
+
+            <div class="card settings-card">
+                <div class="form-group">
+                    <label for="settingStoreName">Store Name</label>
+                    <input type="text" id="settingStoreName" value="J.Lato Gelateria & Café">
+                </div>
+
+                <div class="form-group">
+                    <label for="settingCurrency">Default Currency Symbol</label>
+                    <input type="text" id="settingCurrency" value="$">
+                </div>
+
+                <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- FLAVOR MODAL -->
+<div class="modal" id="flavorModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Add New Flavor</h2>
+            <button class="close-btn" id="closeFlavor"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
+        <form id="flavorForm" onsubmit="return false;">
+            <div class="form-group">
+                <label for="flavorName">Name</label>
+                <input type="text" id="flavorName" required placeholder="e.g. Pistachio Bronte">
+            </div>
+
+            <div class="form-group">
+                <label for="flavorCategory">Category</label>
+                <select id="flavorCategory" required>
+                    <!-- Options populated dynamically -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="flavorDescription">Description</label>
+                <textarea id="flavorDescription" rows="3" placeholder="Describe flavor profile, ingredients..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="flavorImage">Image URL</label>
+                <input type="url" id="flavorImage" placeholder="https://...">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="flavorBadge">Badge Label (Optional)</label>
+                    <input type="text" id="flavorBadge" placeholder="e.g. Bestseller">
+                </div>
+
+                <div class="form-group">
+                    <label for="flavorStatus">Status</label>
+                    <select id="flavorStatus">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="duplicateFlavorButton" style="display: none;">Duplicate</button>
+                <button type="button" class="btn btn-danger" id="deleteFlavorButton" style="display: none;">Delete</button>
+                <button type="submit" class="btn btn-primary" id="saveFlavor">Save Flavor</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal" id="confirmModal">
+    <div class="modal-content modal-sm">
+        <h2>Are you sure?</h2>
+        <p id="confirmMessage">This action cannot be undone.</p>
         <div class="modal-footer">
-
-            <button
-                id="deleteFlavor"
-                class="danger-button">
-
-                🗑 Delete
-
-            </button>
-
-            <button
-                id="duplicateFlavor">
-
-                📄 Duplicate
-
-            </button>
-
-            <button
-                id="saveFlavor"
-                class="primary-button">
-
-                💾 Save Flavor
-
-            </button>
-
+            <button class="btn btn-secondary" id="cancelConfirm">Cancel</button>
+            <button class="btn btn-danger" id="confirmDelete">Delete</button>
         </div>
-
     </div>
-
-</div>
-<!-- CATEGORIES PAGE -->
-
-<section
-    id="categoriesPage"
-    class="page">
-
-    <div class="page-toolbar">
-
-        <h2>
-
-            Categories
-
-        </h2>
-
-        <button
-            id="addCategoryButton"
-            class="primary-button">
-
-            ➕ New Category
-
-        </button>
-
-    </div>
-
-    <div
-        id="categoryList"
-        class="category-list">
-
-        <!-- Categories appear here -->
-
-    </div>
-
-</section>
-
-<!-- IMAGES PAGE -->
-
-<section
-    id="imagesPage"
-    class="page">
-
-    <div class="page-toolbar">
-
-        <h2>
-
-            Image Library
-
-        </h2>
-
-        <button
-            id="uploadImageButton"
-            class="primary-button">
-
-            📤 Upload Image
-
-        </button>
-
-    </div>
-
-    <input
-        id="imageLibraryUpload"
-        type="file"
-        accept="image/*"
-        multiple
-        hidden>
-
-    <div
-        id="imageLibrary"
-        class="image-library">
-
-        <!-- Images appear here -->
-
-    </div>
-
-</section>
-
-<!-- SETTINGS PAGE -->
-
-<section
-    id="settingsPage"
-    class="page">
-
-    <div class="settings-grid">
-
-        <div class="settings-card">
-
-            <h2>
-
-                Store Information
-
-            </h2>
-
-            <label>
-
-                Store Name
-
-            </label>
-
-            <input
-                id="storeName"
-                type="text"
-                value="J.Lato">
-
-            <label>
-
-                Currency
-
-            </label>
-
-            <input
-                id="currency"
-                type="text"
-                value="AED">
-
-            <label>
-
-                Contact Number
-
-            </label>
-
-            <input
-                id="phoneNumber"
-                type="text">
-
-        </div>
-
-        <div class="settings-card">
-
-            <h2>
-
-                Opening Hours
-
-            </h2>
-
-            <textarea
-                id="openingHours"
-                rows="8">Mon 2:00 PM - 12:00 AM
-Tue 11:00 AM - 12:00 AM
-Wed 11:00 AM - 12:00 AM
-Thu 11:00 AM - 12:00 AM
-Fri 11:00 AM - 12:00 AM
-Sat 11:00 AM - 12:00 AM
-Sun 11:00 AM - 12:00 AM</textarea>
-
-            <button
-                id="saveSettings"
-                class="primary-button">
-
-                💾 Save Settings
-
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-<!-- CONFIRM DELETE MODAL -->
-
-<div
-    id="confirmModal"
-    class="modal hidden">
-
-    <div class="modal-card small">
-
-        <h2>
-
-            Delete Flavor?
-
-        </h2>
-
-        <p>
-
-            This action cannot be undone.
-
-        </p>
-
-        <div class="modal-footer">
-
-            <button
-                id="cancelDelete">
-
-                Cancel
-
-            </button>
-
-            <button
-                id="confirmDelete"
-                class="danger-button">
-
-                Delete
-
-            </button>
-
-        </div>
-
-    </div>
-
 </div>
 
-<!-- LOADING OVERLAY -->
-
-<div
-    id="loadingOverlay"
-    class="loading-overlay hidden">
-
-    <div class="loading-card">
-
-        <div class="spinner"></div>
-
-        <p>
-
-            Saving changes...
-
-        </p>
-
-    </div>
-
-</div>
-
-<!-- TOAST -->
-
-<div
-    id="toast"
-    class="toast">
-
-    Saved Successfully
-
-</div>
-
-<!-- FOOTER -->
-
-<footer class="admin-footer">
-
-    <p>
-
-        © 2026 J.Lato Gelateria & Café
-
-    </p>
-
-    <span>
-
-        Powered by Firebase
-
-    </span>
-
-</footer>
-
-</main>
-
-</div>
+<!-- FIREBASE & JS MODULE (Fixed path from admin-v2.js to admin.js) -->
+<script type="module" src="admin.js" defer></script>
 
 </body>
-
 </html>
